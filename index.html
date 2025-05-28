@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Icons+Outlined" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>凤羽导航</h1>
+            <div class="search-bar">
+                <select id="search-engine">
+                    <option value="baidu">百度</option>
+                    <option value="google">Google</option>
+                    <option value="bing">必应</option>
+                    <option value="sogou">搜狗</option>
+                </select>
+                <input type="text" id="search-input" placeholder="输入搜索内容...">
+                <button onclick="performSearch()">搜索</button>
+            </div>
+        </div>
+    </header>
+    <main class="container">
+        <div id="categories-container" class="categories">
+            <!-- Categories will be dynamically added here -->
+        </div>
+        <div class="add-category-btn" onclick="showAddCategoryModal()">
+            <span class="material-icons-outlined">add</span> 添加分类
+        </div>
+    </main>
+    
+    <!-- Modal for Adding Category -->
+    <div id="add-category-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="hideAddCategoryModal()">&times;</span>
+            <h2>添加分类</h2>
+            <input type="text" id="new-category-input" placeholder="分类名称">
+            <button onclick="addCategory()">保存</button>
+        </div>
+    </div>
+    
+    <!-- Modal for Adding Website -->
+    <div id="add-website-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="hideAddWebsiteModal()">&times;</span>
+            <h2>添加网站</h2>
+            <input type="text" id="new-website-name" placeholder="网站名称">
+            <input type="text" id="new-website-url" placeholder="网站地址 (包括 https://)">
+            <input type="text" id="new-website-icon" placeholder="图标URL (可选)">
+            <input type="hidden" id="current-category-index">
+            <button onclick="addWebsite()">保存</button>
+        </div>
+    </div>
+    
+    <!-- Modal for Editing Category -->
+    <div id="edit-category-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="hideEditCategoryModal()">&times;</span>
+            <h2>编辑分类</h2>
+            <input type="text" id="edit-category-input" placeholder="分类名称">
+            <input type="hidden" id="edit-category-index">
+            <button onclick="saveEditedCategory()">保存</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html> 
