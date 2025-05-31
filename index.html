@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>云际导航 - 您的个性化网址收藏夹</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/darkmode.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <h1><i class="bi bi-cloud"></i> 云际导航</h1>
+            </div>
+            <div class="search-bar">
+                <div class="search-input-wrapper">
+                    <i class="bi bi-search search-icon"></i>
+                    <input type="text" id="search-input" placeholder="输入关键词搜索...">
+                </div>
+                <div class="search-engines">
+                    <button data-engine="baidu" class="search-engine-btn"><i class="bi bi-globe"></i> 百度</button>
+                    <button data-engine="google" class="search-engine-btn"><i class="bi bi-google"></i> Google</button>
+                    <button data-engine="bing" class="search-engine-btn"><i class="bi bi-microsoft"></i> 必应</button>
+                    <button data-engine="sogou" class="search-engine-btn"><i class="bi bi-globe2"></i> 搜狗</button>
+                </div>
+            </div>
+            <div class="controls">
+                <button id="dark-mode-toggle" class="icon-btn" title="切换暗黑模式">
+                    <i class="bi bi-moon-fill"></i>
+                </button>
+                <button id="settings-btn" class="icon-btn" title="设置">
+                    <i class="bi bi-gear-fill"></i>
+                </button>
+            </div>
+        </header>
+
+        <main id="bookmarks-container">
+            <!-- 分类和书签将通过JS动态生成 -->
+        </main>
+
+        <div id="add-category-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3><i class="bi bi-folder-plus"></i> 添加分类</h3>
+                    <button class="close-modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="category-name"><i class="bi bi-tag"></i> 分类名称</label>
+                        <input type="text" id="category-name" required placeholder="输入分类名称">
+                    </div>
+                    <button id="save-category" class="btn-primary"><i class="bi bi-check-lg"></i> 保存</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="add-bookmark-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3><i class="bi bi-link-45deg"></i> 添加网站</h3>
+                    <button class="close-modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="bookmark-name"><i class="bi bi-type"></i> 网站名称</label>
+                        <input type="text" id="bookmark-name" required placeholder="输入网站名称">
+                    </div>
+                    <div class="form-group">
+                        <label for="bookmark-url"><i class="bi bi-link"></i> 网站地址</label>
+                        <input type="url" id="bookmark-url" required placeholder="https://example.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="bookmark-icon"><i class="bi bi-image"></i> 图标URL (可选)</label>
+                        <input type="url" id="bookmark-icon" placeholder="https://example.com/favicon.ico">
+                    </div>
+                    <div class="form-group">
+                        <label for="bookmark-category"><i class="bi bi-folder"></i> 所属分类</label>
+                        <select id="bookmark-category"></select>
+                    </div>
+                    <button id="save-bookmark" class="btn-primary"><i class="bi bi-check-lg"></i> 保存</button>
+                </div>
+            </div>
+        </div>
+
+        <button id="add-category-btn" class="floating-btn" title="添加新分类">
+            <i class="bi bi-plus-lg"></i>
+        </button>
+    </div>
+    
+    
+
+    <script src="js/darkmode.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/search.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html> 

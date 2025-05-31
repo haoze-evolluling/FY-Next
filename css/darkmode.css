@@ -1,0 +1,116 @@
+/* 黑暗模式样式变量 */
+body.dark-mode {
+    --text-color: #e1e1e1;
+    --light-text: #adb5bd;
+    --bg-color: rgba(25, 26, 36, 0.85);
+    --card-bg: rgba(35, 36, 45, 0.95);
+    --shadow-color: rgba(0, 0, 0, 0.3);
+    --primary-color: #4361ee;
+    --secondary-color: #4cc9f0;
+}
+
+/* 黑暗模式下的特定元素样式调整 */
+body.dark-mode .icon-btn {
+    color: var(--secondary-color);
+}
+
+body.dark-mode .icon-btn:hover {
+    background-color: rgba(76, 201, 240, 0.15);
+}
+
+body.dark-mode #search-input {
+    background-color: rgba(45, 46, 55, 0.8);
+    color: var(--text-color);
+    border-color: rgba(55, 56, 65, 0.8);
+}
+
+body.dark-mode #search-input:focus {
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 0 3px rgba(76, 201, 240, 0.25);
+}
+
+body.dark-mode .form-group input,
+body.dark-mode .form-group select {
+    background-color: rgba(45, 46, 55, 0.8);
+    border-color: rgba(55, 56, 65, 0.8);
+    color: var(--text-color);
+}
+
+body.dark-mode .form-group input:focus,
+body.dark-mode .form-group select:focus {
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 0 3px rgba(76, 201, 240, 0.25);
+}
+
+body.dark-mode #dark-mode-toggle {
+    color: #ffc107;
+}
+
+body.dark-mode .bookmark-icon {
+    background-color: rgba(45, 46, 55, 0.8);
+    border-color: rgba(55, 56, 65, 0.8);
+}
+
+body.dark-mode .bookmark:hover {
+    background-color: rgba(45, 46, 55, 0.6);
+}
+
+body.dark-mode .bookmark-name {
+    color: var(--text-color);
+}
+
+body.dark-mode a.bookmark-name {
+    color: var(--text-color);
+    text-decoration: none;
+}
+
+body.dark-mode a.bookmark-name:hover {
+    color: var(--secondary-color);
+    text-decoration: underline;
+}
+
+body.dark-mode .category {
+    border-color: rgba(55, 56, 65, 0.5);
+}
+
+body.dark-mode .modal-content {
+    border-color: rgba(55, 56, 65, 0.5);
+}
+
+body.dark-mode .btn-primary:hover {
+    background-color: var(--secondary-color);
+}
+
+body.dark-mode .category-title {
+    color: white;
+}
+
+body.dark-mode .site-footer {
+    color: var(--light-text);
+}
+
+body.dark-mode .site-footer a {
+    color: var(--secondary-color);
+}
+
+body.dark-mode .site-footer a:hover {
+    color: #7dd3f7;
+}
+
+body.dark-mode .search-icon {
+    color: var(--light-text);
+}
+
+body.dark-mode .bookmark-actions button {
+    background-color: rgba(45, 46, 55, 0.9);
+    color: var(--light-text);
+}
+
+body.dark-mode .bookmark-actions button:hover {
+    color: var(--secondary-color);
+}
+
+body.dark-mode .bookmark-actions button.delete-bookmark-btn:hover {
+    background-color: rgba(255, 59, 48, 0.3);
+    color: #ff453a;
+} 
