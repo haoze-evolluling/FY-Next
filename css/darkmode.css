@@ -1,45 +1,45 @@
 /* 黑暗模式样式变量 */
 body.dark-mode {
     --text-color: #e1e1e1;
-    --light-text: #adb5bd;
-    --bg-color: rgba(25, 26, 36, 0.85);
-    --card-bg: rgba(35, 36, 45, 0.95);
-    --shadow-color: rgba(0, 0, 0, 0.3);
-    --primary-color: #4361ee;
-    --secondary-color: #4cc9f0;
+    --light-text: #8a9296;
+    --bg-color: rgba(15, 16, 20, 0.85);
+    --card-bg: rgba(22, 23, 28, 0.95);
+    --shadow-color: rgba(0, 0, 0, 0.4);
+    --primary-color: #00cc7a;
+    --secondary-color: #00a864;
 }
 
 /* 黑暗模式下的特定元素样式调整 */
 body.dark-mode .icon-btn {
-    color: var(--secondary-color);
+    color: var(--primary-color);
 }
 
 body.dark-mode .icon-btn:hover {
-    background-color: rgba(76, 201, 240, 0.15);
+    background-color: rgba(0, 204, 122, 0.15);
 }
 
 body.dark-mode #search-input {
-    background-color: rgba(45, 46, 55, 0.8);
+    background-color: rgba(25, 26, 32, 0.8);
     color: var(--text-color);
-    border-color: rgba(55, 56, 65, 0.8);
+    border-color: rgba(35, 36, 42, 0.8);
 }
 
 body.dark-mode #search-input:focus {
-    border-color: var(--secondary-color);
-    box-shadow: 0 0 0 3px rgba(76, 201, 240, 0.25);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(0, 204, 122, 0.25);
 }
 
 body.dark-mode .form-group input,
 body.dark-mode .form-group select {
-    background-color: rgba(45, 46, 55, 0.8);
-    border-color: rgba(55, 56, 65, 0.8);
+    background-color: rgba(25, 26, 32, 0.8);
+    border-color: rgba(35, 36, 42, 0.8);
     color: var(--text-color);
 }
 
 body.dark-mode .form-group input:focus,
 body.dark-mode .form-group select:focus {
-    border-color: var(--secondary-color);
-    box-shadow: 0 0 0 3px rgba(76, 201, 240, 0.25);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(0, 204, 122, 0.25);
 }
 
 body.dark-mode #dark-mode-toggle {
@@ -47,12 +47,12 @@ body.dark-mode #dark-mode-toggle {
 }
 
 body.dark-mode .bookmark-icon {
-    background-color: rgba(45, 46, 55, 0.8);
-    border-color: rgba(55, 56, 65, 0.8);
+    background-color: rgba(25, 26, 32, 0.8);
+    border-color: rgba(35, 36, 42, 0.8);
 }
 
 body.dark-mode .bookmark:hover {
-    background-color: rgba(45, 46, 55, 0.6);
+    background-color: rgba(25, 26, 32, 0.6);
 }
 
 body.dark-mode .bookmark-name {
@@ -65,16 +65,26 @@ body.dark-mode a.bookmark-name {
 }
 
 body.dark-mode a.bookmark-name:hover {
-    color: var(--secondary-color);
+    color: var(--primary-color);
     text-decoration: underline;
 }
 
 body.dark-mode .category {
-    border-color: rgba(55, 56, 65, 0.5);
+    border-color: rgba(35, 36, 42, 0.5);
+}
+
+body.dark-mode .category-header {
+    background-color: rgba(0, 204, 122, 0.9);
 }
 
 body.dark-mode .modal-content {
-    border-color: rgba(55, 56, 65, 0.5);
+    background-color: rgba(22, 23, 28, 0.95);
+    border-color: rgba(35, 36, 42, 0.5);
+}
+
+body.dark-mode .btn-primary {
+    background-color: var(--primary-color);
+    color: #000;
 }
 
 body.dark-mode .btn-primary:hover {
@@ -82,7 +92,7 @@ body.dark-mode .btn-primary:hover {
 }
 
 body.dark-mode .category-title {
-    color: white;
+    color: #000;
 }
 
 body.dark-mode .site-footer {
@@ -90,11 +100,11 @@ body.dark-mode .site-footer {
 }
 
 body.dark-mode .site-footer a {
-    color: var(--secondary-color);
+    color: var(--primary-color);
 }
 
 body.dark-mode .site-footer a:hover {
-    color: #7dd3f7;
+    color: var(--secondary-color);
 }
 
 body.dark-mode .search-icon {
@@ -102,15 +112,24 @@ body.dark-mode .search-icon {
 }
 
 body.dark-mode .bookmark-actions button {
-    background-color: rgba(45, 46, 55, 0.9);
+    background-color: rgba(25, 26, 32, 0.9);
     color: var(--light-text);
 }
 
 body.dark-mode .bookmark-actions button:hover {
-    color: var(--secondary-color);
+    color: var(--primary-color);
 }
 
 body.dark-mode .bookmark-actions button.delete-bookmark-btn:hover {
     background-color: rgba(255, 59, 48, 0.3);
     color: #ff453a;
+}
+
+body.dark-mode .search-engine-btn:hover {
+    background-color: var(--primary-color);
+    color: #000;
+}
+
+body.dark-mode .bookmarks-list::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 204, 122, 0.3);
 } 

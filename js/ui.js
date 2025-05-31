@@ -4,7 +4,6 @@
 const UI = (function() {
     // DOM元素
     const bookmarksContainer = document.getElementById('bookmarks-container');
-    const addCategoryBtn = document.getElementById('add-category-btn');
     const addCategoryModal = document.getElementById('add-category-modal');
     const addBookmarkModal = document.getElementById('add-bookmark-modal');
     const categoryNameInput = document.getElementById('category-name');
@@ -29,8 +28,8 @@ const UI = (function() {
     
     // 设置事件监听器
     const setupEventListeners = () => {
-        // 添加分类按钮
-        addCategoryBtn.addEventListener('click', () => {
+        // 设置按钮 - 添加新分类功能
+        settingsBtn.addEventListener('click', () => {
             currentEditingId = null; // 重置状态为新增
             openModal(addCategoryModal);
             categoryNameInput.value = '';
@@ -82,7 +81,7 @@ const UI = (function() {
             bookmarksContainer.innerHTML = `
                 <div class="empty-state">
                     <h2>欢迎使用云际导航</h2>
-                    <p>点击右下角的"+"按钮添加您的第一个分类</p>
+                    <p>点击顶部设置图标添加您的第一个分类</p>
                 </div>
             `;
             return;
@@ -182,7 +181,12 @@ const UI = (function() {
         
         // 创建书签链接部分
         const bookmarkLink = document.createElement('a');
-        bookmarkLink.href = bookmark.url;
+        // 处理URL格式，如果不是以http或https开头，自动添加https://
+        let url = bookmark.url;
+        if (url && !url.match(/^(https?:\/\/|file:\/\/)/i)) {
+            url = 'https://' + url;
+        }
+        bookmarkLink.href = url;
         bookmarkLink.target = "_blank";
         bookmarkLink.title = bookmark.name;
         bookmarkLink.className = 'bookmark-name';
@@ -353,12 +357,6 @@ const UI = (function() {
             return;
         }
         
-        // 验证URL格式
-        if (!isValidUrl(url)) {
-            alert('请输入有效的网站地址');
-            return;
-        }
-        
         if (currentEditingId) {
             // 编辑现有书签
             Storage.updateBookmark(currentEditingId, { name, url, icon, categoryId });
@@ -379,16 +377,6 @@ const UI = (function() {
     // 关闭模态框
     const closeModal = (modal) => {
         modal.classList.remove('active');
-    };
-    
-    // 验证URL格式
-    const isValidUrl = (string) => {
-        try {
-            new URL(string);
-            return true;
-        } catch (_) {
-            return false;
-        }
     };
     
     // HTML转义

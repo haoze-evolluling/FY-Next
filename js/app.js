@@ -17,9 +17,9 @@
     // 设置键盘快捷键
     const setupKeyboardShortcuts = () => {
         document.addEventListener('keydown', (e) => {
-            // Alt + C: 添加新分类
-            if (e.altKey && e.key === 'c') {
-                document.getElementById('add-category-btn').click();
+            // Alt + S: 使用设置按钮添加新分类
+            if (e.altKey && e.key === 's') {
+                document.getElementById('settings-btn').click();
             }
             
             // Esc: 关闭当前打开的模态框
