@@ -10,73 +10,41 @@ const Storage = (function() {
     const initializeDefaults = () => {
         // 默认分类
         const defaultCategories = [
-            { id: '1', name: '常用工具' },
-            { id: '2', name: '社交媒体' },
-            { id: '3', name: '视频娱乐' },
-            { id: '4', name: '购物电商' },
-            { id: '5', name: '新闻资讯' },
-            { id: '6', name: '教育学习' },
-            { id: '7', name: '生活服务' },
-            { id: '8', name: '技术开发' }
+            { id: '1', name: '资讯社交' },
+            { id: '2', name: '娱乐购物' },
+            { id: '3', name: '学习开发' },
+            { id: '4', name: '生活工具' }
         ];
         
         // 默认书签
         const defaultBookmarks = [
-            // 常用工具
-            { id: '1', name: '百度', url: 'https://www.baidu.com', icon: 'https://www.baidu.com/favicon.ico', categoryId: '1' },
-            { id: '2', name: '腾讯网', url: 'https://www.qq.com', icon: 'https://www.qq.com/favicon.ico', categoryId: '1' },
-            { id: '3', name: '360', url: 'https://www.360.cn', icon: 'https://www.360.cn/favicon.ico', categoryId: '1' },
-            { id: '4', name: '阿里云', url: 'https://www.aliyun.com', icon: 'https://www.aliyun.com/favicon.ico', categoryId: '1' },
-            { id: '5', name: '高德地图', url: 'https://www.amap.com', icon: 'https://www.amap.com/favicon.ico', categoryId: '1' },
+            // 资讯社交
+            { id: '6', name: '微博', url: 'https://weibo.com', icon: 'https://weibo.com/favicon.ico', categoryId: '1' },
+            { id: '7', name: '微信网页版', url: 'https://web.wechat.com', icon: 'https://web.wechat.com/favicon.ico', categoryId: '1' },
+            { id: '8', name: '知乎', url: 'https://www.zhihu.com', icon: 'https://www.zhihu.com/favicon.ico', categoryId: '1' },
+            { id: '21', name: '新浪新闻', url: 'https://news.sina.com.cn', icon: 'https://news.sina.com.cn/favicon.ico', categoryId: '1' },
+            { id: '22', name: '腾讯新闻', url: 'https://news.qq.com', icon: 'https://news.qq.com/favicon.ico', categoryId: '1' },
             
-            // 社交媒体
-            { id: '6', name: '微博', url: 'https://weibo.com', icon: 'https://weibo.com/favicon.ico', categoryId: '2' },
-            { id: '7', name: '微信网页版', url: 'https://web.wechat.com', icon: 'https://web.wechat.com/favicon.ico', categoryId: '2' },
-            { id: '8', name: '知乎', url: 'https://www.zhihu.com', icon: 'https://www.zhihu.com/favicon.ico', categoryId: '2' },
-            { id: '9', name: '豆瓣', url: 'https://www.douban.com', icon: 'https://www.douban.com/favicon.ico', categoryId: '2' },
-            { id: '10', name: '小红书', url: 'https://www.xiaohongshu.com', icon: 'https://www.xiaohongshu.com/favicon.ico', categoryId: '2' },
+            // 娱乐购物
+            { id: '11', name: '哔哩哔哩', url: 'https://www.bilibili.com', icon: 'https://www.bilibili.com/favicon.ico', categoryId: '2' },
+            { id: '16', name: '淘宝', url: 'https://www.taobao.com', icon: 'https://www.taobao.com/favicon.ico', categoryId: '2' },
+            { id: '17', name: '京东', url: 'https://www.jd.com', icon: 'https://www.jd.com/favicon.ico', categoryId: '2' },
+            { id: '18', name: '拼多多', url: 'https://www.pinduoduo.com', icon: 'https://www.pinduoduo.com/favicon.ico', categoryId: '2' },
+            { id: '13', name: '腾讯视频', url: 'https://v.qq.com', icon: 'https://v.qq.com/favicon.ico', categoryId: '2' },
             
-            // 视频娱乐
-            { id: '11', name: '哔哩哔哩', url: 'https://www.bilibili.com', icon: 'https://www.bilibili.com/favicon.ico', categoryId: '3' },
-            { id: '12', name: '优酷', url: 'https://www.youku.com', icon: 'https://www.youku.com/favicon.ico', categoryId: '3' },
-            { id: '13', name: '腾讯视频', url: 'https://v.qq.com', icon: 'https://v.qq.com/favicon.ico', categoryId: '3' },
-            { id: '14', name: '爱奇艺', url: 'https://www.iqiyi.com', icon: 'https://www.iqiyi.com/favicon.ico', categoryId: '3' },
-            { id: '15', name: '芒果TV', url: 'https://www.mgtv.com', icon: 'https://www.mgtv.com/favicon.ico', categoryId: '3' },
+            // 学习开发
+            { id: '26', name: '中国大学MOOC', url: 'https://www.icourse163.org', icon: 'https://www.icourse163.org/favicon.ico', categoryId: '3' },
+            { id: '36', name: 'GitHub', url: 'https://github.com', icon: 'https://github.com/favicon.ico', categoryId: '3' },
+            { id: '37', name: 'Gitee', url: 'https://gitee.com', icon: 'https://gitee.com/favicon.ico', categoryId: '3' },
+            { id: '38', name: 'Stack Overflow', url: 'https://stackoverflow.com', icon: 'https://stackoverflow.com/favicon.ico', categoryId: '3' },
+            { id: '30', name: '菜鸟教程', url: 'https://www.runoob.com', icon: 'https://www.runoob.com/favicon.ico', categoryId: '3' },
             
-            // 购物电商
-            { id: '16', name: '淘宝', url: 'https://www.taobao.com', icon: 'https://www.taobao.com/favicon.ico', categoryId: '4' },
-            { id: '17', name: '京东', url: 'https://www.jd.com', icon: 'https://www.jd.com/favicon.ico', categoryId: '4' },
-            { id: '18', name: '拼多多', url: 'https://www.pinduoduo.com', icon: 'https://www.pinduoduo.com/favicon.ico', categoryId: '4' },
-            { id: '19', name: '苏宁易购', url: 'https://www.suning.com', icon: 'https://www.suning.com/favicon.ico', categoryId: '4' },
-            { id: '20', name: '唯品会', url: 'https://www.vip.com', icon: 'https://www.vip.com/favicon.ico', categoryId: '4' },
-            
-            // 新闻资讯
-            { id: '21', name: '新浪新闻', url: 'https://news.sina.com.cn', icon: 'https://news.sina.com.cn/favicon.ico', categoryId: '5' },
-            { id: '22', name: '腾讯新闻', url: 'https://news.qq.com', icon: 'https://news.qq.com/favicon.ico', categoryId: '5' },
-            { id: '23', name: '网易新闻', url: 'https://news.163.com', icon: 'https://news.163.com/favicon.ico', categoryId: '5' },
-            { id: '24', name: '凤凰网', url: 'https://www.ifeng.com', icon: 'https://www.ifeng.com/favicon.ico', categoryId: '5' },
-            { id: '25', name: '央视网', url: 'https://www.cctv.com', icon: 'https://www.cctv.com/favicon.ico', categoryId: '5' },
-            
-            // 教育学习
-            { id: '26', name: '中国大学MOOC', url: 'https://www.icourse163.org', icon: 'https://www.icourse163.org/favicon.ico', categoryId: '6' },
-            { id: '27', name: '网易公开课', url: 'https://open.163.com', icon: 'https://open.163.com/favicon.ico', categoryId: '6' },
-            { id: '28', name: '学堂在线', url: 'https://www.xuetangx.com', icon: 'https://www.xuetangx.com/favicon.ico', categoryId: '6' },
-            { id: '29', name: 'CSDN', url: 'https://www.csdn.net', icon: 'https://www.csdn.net/favicon.ico', categoryId: '6' },
-            { id: '30', name: '菜鸟教程', url: 'https://www.runoob.com', icon: 'https://www.runoob.com/favicon.ico', categoryId: '6' },
-            
-            // 生活服务
-            { id: '31', name: '美团', url: 'https://www.meituan.com', icon: 'https://www.meituan.com/favicon.ico', categoryId: '7' },
-            { id: '32', name: '大众点评', url: 'https://www.dianping.com', icon: 'https://www.dianping.com/favicon.ico', categoryId: '7' },
-            { id: '33', name: '携程', url: 'https://www.ctrip.com', icon: 'https://www.ctrip.com/favicon.ico', categoryId: '7' },
-            { id: '34', name: '饿了么', url: 'https://www.ele.me', icon: 'https://www.ele.me/favicon.ico', categoryId: '7' },
-            { id: '35', name: '12306', url: 'https://www.12306.cn', icon: 'https://www.12306.cn/favicon.ico', categoryId: '7' },
-            
-            // 技术开发
-            { id: '36', name: 'GitHub', url: 'https://github.com', icon: 'https://github.com/favicon.ico', categoryId: '8' },
-            { id: '37', name: 'Gitee', url: 'https://gitee.com', icon: 'https://gitee.com/favicon.ico', categoryId: '8' },
-            { id: '38', name: 'Stack Overflow', url: 'https://stackoverflow.com', icon: 'https://stackoverflow.com/favicon.ico', categoryId: '8' },
-            { id: '39', name: 'V2EX', url: 'https://www.v2ex.com', icon: 'https://www.v2ex.com/favicon.ico', categoryId: '8' },
-            { id: '40', name: '掘金', url: 'https://juejin.cn', icon: 'https://juejin.cn/favicon.ico', categoryId: '8' }
+            // 生活工具
+            { id: '1', name: '百度', url: 'https://www.baidu.com', icon: 'https://www.baidu.com/favicon.ico', categoryId: '4' },
+            { id: '5', name: '高德地图', url: 'https://www.amap.com', icon: 'https://www.amap.com/favicon.ico', categoryId: '4' },
+            { id: '31', name: '美团', url: 'https://www.meituan.com', icon: 'https://www.meituan.com/favicon.ico', categoryId: '4' },
+            { id: '35', name: '12306', url: 'https://www.12306.cn', icon: 'https://www.12306.cn/favicon.ico', categoryId: '4' },
+            { id: '33', name: '携程', url: 'https://www.ctrip.com', icon: 'https://www.ctrip.com/favicon.ico', categoryId: '4' }
         ];
         
         // 存入本地存储
@@ -271,5 +239,5 @@ const Storage = (function() {
         exportData,
         importData
     };
-})(); 
+})();
  
