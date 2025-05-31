@@ -53,9 +53,6 @@ header {
     backdrop-filter: blur(var(--blur-amount));
     -webkit-backdrop-filter: blur(var(--blur-amount));
     box-shadow: 0 8px 30px var(--shadow-color);
-    position: sticky;
-    top: 20px;
-    z-index: 100;
     width: 100%;
 }
 
@@ -168,7 +165,7 @@ header {
 }
 
 .category {
-    background-color: var(--bg-color);
+    background-color: #ffffff;
     border-radius: var(--card-radius);
     overflow: hidden;
     backdrop-filter: blur(var(--blur-amount));
@@ -293,8 +290,8 @@ body.dark-mode .bookmarks-list::-webkit-scrollbar-thumb:hover {
 }
 
 .bookmark-icon {
-    width: 32px;
-    height: 32px;
+    width: 19px;
+    height: 19px;
     border-radius: 6px;
     overflow: hidden;
     background-color: var(--card-bg);
@@ -327,11 +324,25 @@ body.dark-mode .bookmarks-list::-webkit-scrollbar-thumb:hover {
     flex-grow: 1;
     white-space: nowrap;
     text-decoration: none;
+    transition: all var(--transition-speed) ease, transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 a.bookmark-name:hover {
     color: var(--primary-color);
     text-decoration: underline;
+    transform: translateY(-2px) scale(1.02);
+    transform-origin: left center;
+}
+
+/* 添加图标链接样式 */
+.bookmark-icon-link {
+    display: block;
+    text-decoration: none;
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.bookmark-icon-link:hover {
+    transform: translateY(-2px) scale(1.05);
 }
 
 .bookmark-actions {
@@ -611,8 +622,8 @@ a.bookmark-name:hover {
     }
     
     .bookmark-icon {
-        width: 28px;
-        height: 28px;
+        width: 17px;
+        height: 17px;
     }
     
     .bookmark-name {

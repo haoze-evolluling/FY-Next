@@ -7,6 +7,9 @@
         // 初始化UI
         UI.initialize();
 
+        // 初始化屏保
+        Screensaver.initialize();
+
         // 设置键盘快捷键
         setupKeyboardShortcuts();
         
