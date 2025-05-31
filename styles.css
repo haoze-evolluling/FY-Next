@@ -6,10 +6,16 @@
 }
 
 body {
-    background-color: #f0f2f5;
+    background-color: #f0f2f5; /* 背景图加载前的颜色 */
+    background-image: url('sky01.jpg');
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
     color: #333;
     line-height: 1.6;
     overflow-x: hidden; /* Prevent horizontal scroll */
+    transition: background-image 0.5s ease-in-out; /* 背景图平滑过渡 */
 }
 
 .container {
@@ -20,12 +26,13 @@ body {
 }
 
 header {
-    background: #fff;
+    background: rgba(255, 255, 255, 0.9);
     color: #333;
     padding: 1.5rem 0;
     text-align: center;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     animation: fadeIn 0.5s ease-in-out;
+    backdrop-filter: blur(5px);
 }
 
 header h1 {
@@ -87,10 +94,10 @@ main {
 }
 
 .category {
-    background: white;
+    background: rgba(255, 255, 255, 0.85);
     border-radius: 8px;
     padding: 1rem;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     transition: transform 0.3s, box-shadow 0.3s;
     animation: fadeIn 0.5s ease-out forwards;
     opacity: 0;
@@ -98,6 +105,7 @@ main {
     width: calc(25% - 1.5rem);
     min-width: 250px;
     margin-bottom: 1.5rem;
+    backdrop-filter: blur(5px);
 }
 
 .category:hover {
@@ -179,10 +187,10 @@ main {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: white;
+    background: rgba(255, 255, 255, 0.85);
     border-radius: 8px;
     padding: 1rem;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     cursor: pointer;
     transition: transform 0.3s, box-shadow 0.3s;
     width: calc(25% - 1.5rem);
@@ -193,6 +201,7 @@ main {
     animation: fadeIn 0.5s ease-out forwards;
     opacity: 0;
     animation-delay: 0.5s;
+    backdrop-filter: blur(5px);
 }
 
 .add-category-btn:hover {
@@ -292,9 +301,39 @@ footer {
     to { transform: translateY(0); opacity: 1; }
 }
 
+/* 针对大屏幕设备的优化 */
+@media (min-width: 1440px) {
+    .container {
+        max-width: 1400px;
+    }
+    
+    .category {
+        width: calc(20% - 1.5rem);
+    }
+    
+    .add-category-btn {
+        width: calc(20% - 1.5rem);
+    }
+}
+
 @media (max-width: 768px) {
+    body {
+        /* 优化移动设备上的背景图片显示 */
+        background-attachment: scroll; /* 在移动设备上使用滚动而非固定背景 */
+        min-height: 100vh; /* 确保body至少和视口一样高，让背景图填充 */
+    }
+    
+    header {
+        padding: 1rem 0;
+    }
+    
     header h1 {
         font-size: 1.8rem;
+    }
+    
+    .container {
+        width: 95%;
+        padding: 0 10px;
     }
     
     .search-bar {
@@ -320,6 +359,7 @@ footer {
         width: 100%;
         min-width: 200px;
         margin: 0 auto 15px;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
     }
     
     .link-item {
@@ -327,4 +367,9 @@ footer {
         flex-wrap: nowrap;
         justify-content: flex-start;
     }
-} 
+    
+    .modal-content {
+        width: 90%;
+        margin: 30% auto;
+    }
+}
