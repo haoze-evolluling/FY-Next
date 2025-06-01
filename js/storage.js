@@ -142,6 +142,16 @@ const Storage = (function() {
     // 获取网站图标的函数
     const getFaviconUrl = (url) => {
         try {
+            // 提取域名
+            let domain = url;
+            // 移除协议部分
+            if (domain.startsWith('http://')) domain = domain.substring(7);
+            if (domain.startsWith('https://')) domain = domain.substring(8);
+            // 移除路径部分
+            domain = domain.split('/')[0];
+            // 移除www前缀
+            if (domain.startsWith('www.')) domain = domain.substring(4);
+            
             // 1. 首先尝试从Bing获取图标
             const bingFaviconUrl = `https://www.bing.com/favicon/search?url=${domain}`;
             
@@ -151,7 +161,7 @@ const Storage = (function() {
             // 3. 如果都失败，直接使用网站的favicon.ico
             const directFaviconUrl = `https://${domain}/favicon.ico`;
             
-            // 返回备选图标URL数组
+            // 返回备选图标URL数组，按优先级排序
             return [bingFaviconUrl, baiduFaviconUrl, directFaviconUrl];
         } catch (error) {
             // 如果URL解析失败，返回默认图标
