@@ -16,14 +16,14 @@
             name: '必应',
             url: 'https://www.bing.com/search?q='
         },
-        sogou: {
-            name: '搜狗',
-            url: 'https://www.sogou.com/web?query='
+        mita: {
+            name: '秘塔AI搜索',
+            url: 'https://www.metaso.cn/search?q='
         }
     };
     
     // 默认搜索引擎
-    let currentSearchEngine = localStorage.getItem('preferred_search_engine') || 'baidu';
+    let currentSearchEngine = localStorage.getItem('preferred_search_engine') || 'mita';
     
     // DOM元素
     const searchInput = document.getElementById('search-input');
@@ -97,4 +97,4 @@
     
     // 初始化
     initialize();
-})(); 
+})();
