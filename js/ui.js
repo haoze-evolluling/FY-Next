@@ -178,7 +178,14 @@ const UI = (function() {
         bookmarkLink.target = "_blank";
         bookmarkLink.title = bookmark.name;
         bookmarkLink.className = 'bookmark-name';
-        bookmarkLink.textContent = bookmark.name;
+        
+        // 创建并添加网站图标
+        const faviconElement = Favicon.createFaviconElement(url);
+        bookmarkLink.appendChild(faviconElement);
+        
+        // 添加文本节点
+        const textNode = document.createTextNode(bookmark.name);
+        bookmarkLink.appendChild(textNode);
         
         // 创建操作按钮部分
         const bookmarkActions = document.createElement('div');
