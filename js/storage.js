@@ -11,7 +11,7 @@ const Storage = (function() {
         // 默认分类
         const defaultCategories = [
             { id: '1', name: '资讯社交' },
-            { id: '2', name: '购物消费' },
+            { id: '2', name: '网课教育' },
             { id: '3', name: '视频娱乐' },
             { id: '4', name: '工具助手' },
         ];
@@ -27,11 +27,11 @@ const Storage = (function() {
             { id: '22', name: '百度贴吧', url: 'https://tieba.baidu.com/', icon: 'https://tieba.baidu.com/favicon.ico', categoryId: '1' },
             
             // 网课教育
-            { id: '28', name: '中国大学MOOC', url: 'https://www.icourse163.org', icon: 'https://www.icourse163.org/favicon.ico', categoryId: '3' },
-            { id: '29', name: '学堂在线', url: 'https://www.xuetangx.com', icon: 'https://www.xuetangx.com/favicon.ico', categoryId: '3' },
-            { id: '30', name: '智慧树', url: 'https://www.zhihuishu.com', icon: 'https://www.zhihuishu.com/favicon.ico', categoryId: '3' },
-            { id: '31', name: '超星学习通', url: 'https://www.chaoxing.com', icon: 'https://www.chaoxing.com/favicon.ico', categoryId: '3' },
-            { id: '32', name: '网易云课堂', url: 'https://study.163.com', icon: 'https://study.163.com/favicon.ico', categoryId: '3' },
+            { id: '28', name: '中国大学MOOC', url: 'https://www.icourse163.org', icon: 'https://www.icourse163.org/favicon.ico', categoryId: '2' },
+            { id: '29', name: '学堂在线', url: 'https://www.xuetangx.com', icon: 'https://www.xuetangx.com/favicon.ico', categoryId: '2' },
+            { id: '30', name: '智慧树', url: 'https://www.zhihuishu.com', icon: 'https://www.zhihuishu.com/favicon.ico', categoryId: '2' },
+            { id: '31', name: '超星学习通', url: 'https://www.chaoxing.com', icon: 'https://www.chaoxing.com/favicon.ico', categoryId: '2' },
+            { id: '32', name: '网易云课堂', url: 'https://study.163.com', icon: 'https://study.163.com/favicon.ico', categoryId: '2' },
             // 视频娱乐
             { id: '28', name: '哔哩哔哩', url: 'https://www.bilibili.com', icon: 'https://www.bilibili.com/favicon.ico', categoryId: '3' },
             { id: '29', name: '起点中文网', url: 'https://www.qidian.com', icon: 'https://www.qidian.com/favicon.ico', categoryId: '3' },
