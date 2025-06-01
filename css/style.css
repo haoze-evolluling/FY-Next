@@ -290,31 +290,28 @@ body.dark-mode .bookmarks-list::-webkit-scrollbar-thumb:hover {
     background-color: rgba(255, 255, 255, 0.5);
 }
 
-/* 书签名称样式 */
 .bookmark-name {
+    font-size: 0.85rem;
     color: var(--text-color);
-    text-decoration: none;
-    font-size: 0.95rem;
-    font-weight: 500;
-    transition: all var(--transition-speed) ease;
-    white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    font-weight: 500;
+    flex-grow: 1;
+    white-space: nowrap;
+    text-decoration: none;
+    transition: color var(--transition-speed) ease;
     display: flex;
     align-items: center;
     gap: 8px;
 }
 
-/* 网站图标样式 */
 .bookmark-icon {
     width: 16px;
     height: 16px;
-    min-width: 16px; /* 防止图标被压缩 */
+    min-width: 16px;
     object-fit: contain;
     border-radius: 3px;
     vertical-align: middle;
-    background-color: #f5f5f5;
-    border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 a.bookmark-name:hover {
@@ -600,6 +597,13 @@ a.bookmark-name:hover {
     
     .bookmark-name {
         font-size: 0.8rem;
+        gap: 6px;
+    }
+    
+    .bookmark-icon {
+        width: 14px;
+        height: 14px;
+        min-width: 14px;
     }
     
     .floating-btn {

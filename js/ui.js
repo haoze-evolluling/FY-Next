@@ -179,13 +179,43 @@ const UI = (function() {
         bookmarkLink.title = bookmark.name;
         bookmarkLink.className = 'bookmark-name';
         
-        // 创建并添加网站图标
-        const faviconElement = Favicon.createFaviconElement(url);
-        bookmarkLink.appendChild(faviconElement);
+        // 创建图标元素
+        const iconElement = document.createElement('img');
+        iconElement.className = 'bookmark-icon';
         
-        // 添加文本节点
-        const textNode = document.createTextNode(bookmark.name);
-        bookmarkLink.appendChild(textNode);
+        try {
+            // 获取域名，用于图标获取
+            const domain = new URL(url).hostname;
+            
+            // 设置初始图标 - 直接从网站获取
+            iconElement.src = `https://${domain}/favicon.ico`;
+            
+            // 设置多级回退机制
+            iconElement.onerror = function() {
+                // 1. 如果直接从网站获取失败，尝试从百度获取
+                this.src = `https://favicon.cccyun.cc/${domain}`;
+                
+                // 2. 如果百度获取失败，尝试从Google获取
+                this.onerror = function() {
+                    this.src = `https://www.google.com/s2/favicons?domain=${domain}`;
+                    
+                    // 3. 如果仍然失败，使用本地默认图标
+                    this.onerror = function() {
+                        this.src = 'internet.png';
+                        // 防止继续触发onerror事件
+                        this.onerror = null;
+                    };
+                };
+            };
+        } catch (error) {
+            // 如果URL解析失败，使用默认图标
+            console.error("图标URL解析失败:", error);
+            iconElement.src = 'internet.png';
+        }
+        
+        // 添加图标和文本到链接
+        bookmarkLink.appendChild(iconElement);
+        bookmarkLink.appendChild(document.createTextNode(bookmark.name));
         
         // 创建操作按钮部分
         const bookmarkActions = document.createElement('div');
@@ -257,9 +287,17 @@ const UI = (function() {
     
     // 删除分类
     const deleteCategory = (category) => {
+        // 暂时禁用屏保触发
+        clearTimeout(window.idleTimer);
+        
         if (confirm(`确定要删除分类"${category.name}"吗？此操作将同时删除该分类下的所有网站。`)) {
             Storage.deleteCategory(category.id);
             renderBookmarks();
+        }
+        
+        // 重置屏保计时器
+        if (typeof Screensaver !== 'undefined' && Screensaver.resetIdleTimer) {
+            Screensaver.resetIdleTimer();
         }
     };
     
@@ -275,9 +313,17 @@ const UI = (function() {
     
     // 删除书签
     const deleteBookmark = (bookmark) => {
+        // 暂时禁用屏保触发
+        clearTimeout(window.idleTimer);
+        
         if (confirm(`确定要删除"${bookmark.name}"吗？`)) {
             Storage.deleteBookmark(bookmark.id);
             renderBookmarks();
+        }
+        
+        // 重置屏保计时器
+        if (typeof Screensaver !== 'undefined' && Screensaver.resetIdleTimer) {
+            Screensaver.resetIdleTimer();
         }
     };
     

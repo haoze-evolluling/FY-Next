@@ -7,7 +7,8 @@ const Screensaver = (function() {
     const PARTICLES_COUNT = 30; // 粒子数量
     
     // 变量
-    let idleTimer;
+    // 将 idleTimer 设置为全局变量
+    window.idleTimer = null;
     let screensaverElem;
     let clockElem;
     let dateElem;
@@ -114,7 +115,17 @@ const Screensaver = (function() {
         
         // 窗口失焦时也显示屏保
         window.addEventListener('blur', () => {
-            showScreensaver();
+            // 检查是否有确认对话框或警告框打开
+            // 如果有对话框打开，则不触发屏保
+            if (document.hasFocus() === false && !document.querySelector('dialog[open]')) {
+                // 使用setTimeout延迟检测，因为confirm对话框会暂时导致失焦
+                setTimeout(() => {
+                    // 再次检查，如果仍然失焦，则显示屏保
+                    if (document.hasFocus() === false) {
+                        showScreensaver();
+                    }
+                }, 500);
+            }
         });
         
         // 窗口尺寸变化时调整粒子位置
@@ -165,8 +176,8 @@ const Screensaver = (function() {
     
     // 重置空闲计时器
     const resetIdleTimer = () => {
-        clearTimeout(idleTimer);
-        idleTimer = setTimeout(showScreensaver, IDLE_TIME);
+        clearTimeout(window.idleTimer);
+        window.idleTimer = setTimeout(showScreensaver, IDLE_TIME);
     };
     
     // 显示屏保
@@ -246,6 +257,7 @@ const Screensaver = (function() {
     
     // 公开API
     return {
-        initialize
+        initialize,
+        resetIdleTimer  // 暴露重置计时器函数
     };
 })(); 

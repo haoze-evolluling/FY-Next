@@ -131,7 +131,7 @@ const Storage = (function() {
             id: Date.now().toString(),
             name: name,
             url: url,
-            icon: icon || getFaviconUrl(url).primary, // 使用新的图标获取函数的primary图标
+            icon: icon || null, // 不再在这里设置图标，而是在UI渲染时动态获取
             categoryId: categoryId
         };
         
@@ -147,20 +147,29 @@ const Storage = (function() {
             const urlObj = new URL(url);
             const domain = urlObj.hostname;
             
-            // 直接使用网站的favicon.ico
-            const directFaviconUrl = `https://${domain}/favicon.ico`;
-            
-            // 只返回网站自身图标，不提供备选方案
+            // 多级回退机制
             return {
-                primary: directFaviconUrl,
-                fallback1: null,
-                fallback2: null,
-                default: "images/default-icon.png"
+                // 1. 首先尝试从网站本身获取
+                primary: `https://${domain}/favicon.ico`,
+                
+                // 2. 如果失败，尝试从百度获取
+                fallback1: `https://favicon.cccyun.cc/${domain}`,
+                
+                // 3. 如果仍然失败，尝试从Google获取
+                fallback2: `https://www.google.com/s2/favicons?domain=${domain}`,
+                
+                // 4. 最后的默认图标
+                default: "internet.png"
             };
         } catch (error) {
             // 如果URL解析失败，返回默认图标
             console.error("图标获取失败:", error);
-            return "images/default-icon.png";
+            return {
+                primary: "internet.png",
+                fallback1: null,
+                fallback2: null,
+                default: "internet.png"
+            };
         }
     };
     
