@@ -1,15 +1,85 @@
-/* 黑暗模式样式变量 */
+/* 暗黑模式样式 */
 body.dark-mode {
-    --text-color: #e1e1e1;
-    --light-text: #8a9296;
-    --bg-color: rgba(15, 16, 20, 0.85);
-    --card-bg: rgba(22, 23, 28, 0.95);
-    --shadow-color: rgba(0, 0, 0, 0.4);
-    --primary-color: #00cc7a;
-    --secondary-color: #00a864;
+    --bg-color: #1a1a1a;
+    --card-bg: rgba(30, 30, 30, 0.8);
+    --text-color: #e0e0e0;
+    --light-text: #aaaaaa;
+    --border-color: #333333;
+    --shadow-color: rgba(0, 0, 0, 0.3);
+    --primary-color: #4361ee;
+    --secondary-color: #3a56d4;
+    --bookmark-bg: rgba(40, 40, 40, 0.8);
+    --bookmark-border: #333333;
+    --bookmark-hover-bg: rgba(50, 50, 50, 0.9);
 }
 
-/* 黑暗模式下的特定元素样式调整 */
+body.dark-mode .search-input-wrapper {
+    background-color: rgba(40, 40, 40, 0.8);
+    border: 1px solid #333333;
+}
+
+body.dark-mode #search-input {
+    color: #e0e0e0;
+}
+
+body.dark-mode .search-engine-btn {
+    background-color: rgba(40, 40, 40, 0.8);
+    color: #aaaaaa;
+    border: 1px solid #333333;
+}
+
+body.dark-mode .search-engine-btn:hover {
+    background-color: rgba(60, 60, 60, 0.9);
+    color: #e0e0e0;
+}
+
+body.dark-mode .category {
+    background-color: rgba(30, 30, 30, 0.8);
+    border: 1px solid #333333;
+}
+
+body.dark-mode .category:hover {
+    background-color: rgba(35, 35, 35, 0.9);
+}
+
+body.dark-mode .bookmark {
+    background-color: rgba(40, 40, 40, 0.8);
+    border: 1px solid #333333;
+}
+
+body.dark-mode .bookmark:hover {
+    background-color: rgba(50, 50, 50, 0.9);
+}
+
+body.dark-mode .empty-bookmarks {
+    color: #aaaaaa;
+}
+
+body.dark-mode .modal-content {
+    background-color: rgba(30, 30, 30, 0.95);
+    border: 1px solid #333333;
+}
+
+body.dark-mode .form-group input,
+body.dark-mode .form-group select {
+    background-color: rgba(40, 40, 40, 0.8);
+    border: 1px solid #333333;
+    color: #e0e0e0;
+}
+
+body.dark-mode .form-group label {
+    color: #e0e0e0;
+}
+
+/* 暗黑模式切换按钮 */
+body.dark-mode #dark-mode-toggle {
+    color: #ffb700;
+}
+
+body.dark-mode #dark-mode-toggle:hover {
+    background-color: rgba(255, 183, 0, 0.2);
+}
+
 body.dark-mode .icon-btn {
     color: var(--primary-color);
 }
@@ -18,41 +88,15 @@ body.dark-mode .icon-btn:hover {
     background-color: rgba(0, 204, 122, 0.15);
 }
 
-body.dark-mode #search-input {
-    background-color: rgba(25, 26, 32, 0.8);
-    color: var(--text-color);
-    border-color: rgba(35, 36, 42, 0.8);
-}
-
 body.dark-mode #search-input:focus {
     border-color: var(--primary-color);
     box-shadow: 0 0 0 3px rgba(0, 204, 122, 0.25);
-}
-
-body.dark-mode .form-group input,
-body.dark-mode .form-group select {
-    background-color: rgba(25, 26, 32, 0.8);
-    border-color: rgba(35, 36, 42, 0.8);
-    color: var(--text-color);
 }
 
 body.dark-mode .form-group input:focus,
 body.dark-mode .form-group select:focus {
     border-color: var(--primary-color);
     box-shadow: 0 0 0 3px rgba(0, 204, 122, 0.25);
-}
-
-body.dark-mode #dark-mode-toggle {
-    color: #ffc107;
-}
-
-body.dark-mode .bookmark-icon {
-    background-color: rgba(25, 26, 32, 0.8);
-    border-color: rgba(35, 36, 42, 0.8);
-}
-
-body.dark-mode .bookmark:hover {
-    background-color: rgba(25, 26, 32, 0.6);
 }
 
 body.dark-mode .bookmark-name {
@@ -69,18 +113,8 @@ body.dark-mode a.bookmark-name:hover {
     text-decoration: underline;
 }
 
-body.dark-mode .category {
-    border-color: rgba(35, 36, 42, 0.5);
-    background-color: var(--bg-color);
-}
-
 body.dark-mode .category-header {
     background-color: rgba(0, 204, 122, 0.9);
-}
-
-body.dark-mode .modal-content {
-    background-color: rgba(22, 23, 28, 0.95);
-    border-color: rgba(35, 36, 42, 0.5);
 }
 
 body.dark-mode .btn-primary {
@@ -124,11 +158,6 @@ body.dark-mode .bookmark-actions button:hover {
 body.dark-mode .bookmark-actions button.delete-bookmark-btn:hover {
     background-color: rgba(255, 59, 48, 0.3);
     color: #ff453a;
-}
-
-body.dark-mode .search-engine-btn:hover {
-    background-color: var(--primary-color);
-    color: #000;
 }
 
 body.dark-mode .bookmarks-list::-webkit-scrollbar-thumb {

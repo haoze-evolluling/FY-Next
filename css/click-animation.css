@@ -1,6 +1,6 @@
 /* 点击动画效果 */
 .bookmark-name,
-.bookmark-icon-link,
+.btn-primary,
 .search-engine-btn,
 .icon-btn,
 .category-actions button,
@@ -17,7 +17,7 @@ a {
     transform: scale(0.95) !important;
 }
 
-.bookmark-icon-link:active,
+.btn-primary:active,
 .search-engine-btn:active,
 .icon-btn:active,
 .category-actions button:active,
@@ -30,12 +30,10 @@ a:active:not(.bookmark-name) {
 .ripple {
     position: absolute;
     border-radius: 50%;
-    background: rgba(67, 97, 238, 0.25);
+    background-color: rgba(255, 255, 255, 0.6);
     transform: scale(0);
-    opacity: 1;
-    animation: ripple-effect 0.75s cubic-bezier(0.4, 0, 0.2, 1);
+    animation: ripple-animation 0.6s linear;
     pointer-events: none;
-    z-index: 0; /* 确保波纹在内容下层 */
 }
 
 /* 删除按钮的特殊效果 */
@@ -44,16 +42,9 @@ a:active:not(.bookmark-name) {
     background: rgba(255, 59, 48, 0.25);
 }
 
-@keyframes ripple-effect {
-    0% {
-        transform: scale(0);
-        opacity: 1;
-    }
-    50% {
-        opacity: 0.5;
-    }
-    100% {
-        transform: scale(2.5);
+@keyframes ripple-animation {
+    to {
+        transform: scale(4);
         opacity: 0;
     }
 }

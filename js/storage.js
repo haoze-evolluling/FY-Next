@@ -20,31 +20,32 @@ const Storage = (function() {
         const defaultBookmarks = [
             
             // 资讯社交
-            { id: '6', name: '微信读书', url: 'https://weread.qq.com/', icon: 'https://weread.qq.com/favicon.ico', categoryId: '1' },
-            { id: '7', name: 'QQ邮箱', url: 'https://mail.qq.com/', icon: 'https://mail.qq.com/favicon.ico', categoryId: '1' },
-            { id: '8', name: '知乎', url: 'https://www.zhihu.com', icon: 'https://www.zhihu.com/favicon.ico', categoryId: '1' },
-            { id: '21', name: '新浪微博', url: 'https://weibo.com', icon: 'https://weibo.com/favicon.ico', categoryId: '1' },
-            { id: '22', name: '百度贴吧', url: 'https://tieba.baidu.com/', icon: 'https://tieba.baidu.com/favicon.ico', categoryId: '1' },
+            { id: '6', name: '微信读书', url: 'https://weread.qq.com/', categoryId: '1' },
+            { id: '7', name: 'QQ邮箱', url: 'https://mail.qq.com/', categoryId: '1' },
+            { id: '8', name: '知乎', url: 'https://www.zhihu.com', categoryId: '1' },
+            { id: '21', name: '新浪微博', url: 'https://weibo.com', categoryId: '1' },
+            { id: '22', name: '百度贴吧', url: 'https://tieba.baidu.com/', categoryId: '1' },
             
             // 网课教育
-            { id: '28', name: '中国大学MOOC', url: 'https://www.icourse163.org', icon: 'https://www.icourse163.org/favicon.ico', categoryId: '2' },
-            { id: '29', name: '学堂在线', url: 'https://www.xuetangx.com', icon: 'https://www.xuetangx.com/favicon.ico', categoryId: '2' },
-            { id: '30', name: '智慧树', url: 'https://www.zhihuishu.com', icon: 'https://www.zhihuishu.com/favicon.ico', categoryId: '2' },
-            { id: '31', name: '超星学习通', url: 'https://www.chaoxing.com', icon: 'https://www.chaoxing.com/favicon.ico', categoryId: '2' },
-            { id: '32', name: '网易云课堂', url: 'https://study.163.com', icon: 'https://study.163.com/favicon.ico', categoryId: '2' },
+            { id: '28', name: '中国大学MOOC', url: 'https://www.icourse163.org', categoryId: '2' },
+            { id: '29', name: '学堂在线', url: 'https://www.xuetangx.com', categoryId: '2' },
+            { id: '30', name: '智慧树', url: 'https://www.zhihuishu.com', categoryId: '2' },
+            { id: '31', name: '超星学习通', url: 'https://www.chaoxing.com', categoryId: '2' },
+            { id: '32', name: '网易云课堂', url: 'https://study.163.com', categoryId: '2' },
+            
             // 视频娱乐
-            { id: '28', name: '哔哩哔哩', url: 'https://www.bilibili.com', icon: 'https://www.bilibili.com/favicon.ico', categoryId: '3' },
-            { id: '29', name: '起点中文网', url: 'https://www.qidian.com', icon: 'https://www.qidian.com/favicon.ico', categoryId: '3' },
-            { id: '30', name: '腾讯视频', url: 'https://v.qq.com', icon: 'https://v.qq.com/favicon.ico', categoryId: '3' },
-            { id: '31', name: '优酷', url: 'https://www.youku.com', icon: 'https://www.youku.com/favicon.ico', categoryId: '3' },
-            { id: '32', name: '抖音', url: 'https://www.douyin.com', icon: 'https://www.douyin.com/favicon.ico', categoryId: '3' },
+            { id: '28', name: '哔哩哔哩', url: 'https://www.bilibili.com', categoryId: '3' },
+            { id: '29', name: '起点中文网', url: 'https://www.qidian.com', categoryId: '3' },
+            { id: '30', name: '腾讯视频', url: 'https://v.qq.com', categoryId: '3' },
+            { id: '31', name: '优酷', url: 'https://www.youku.com', categoryId: '3' },
+            { id: '32', name: '抖音', url: 'https://www.douyin.com', categoryId: '3' },
             
             // 工具助手
-            { id: '33', name: '百度', url: 'https://www.baidu.com', icon: 'https://www.baidu.com/favicon.ico', categoryId: '4' },
-            { id: '34', name: '高德地图', url: 'https://www.amap.com', icon: 'https://www.amap.com/favicon.ico', categoryId: '4' },
-            { id: '35', name: 'WPS', url: 'https://www.wps.cn', icon: 'https://www.wps.cn/favicon.ico', categoryId: '4' },
+            { id: '33', name: '百度', url: 'https://www.baidu.com', categoryId: '4' },
+            { id: '34', name: '高德地图', url: 'https://www.amap.com', categoryId: '4' },
+            { id: '35', name: 'WPS', url: 'https://www.wps.cn', categoryId: '4' },
             { id: '36', name: '豆包', url: 'https://www.doubao.com', categoryId: '4' },
-            { id: '37', name: '12306', url: 'https://www.12306.cn', icon: 'https://www.12306.cn/favicon.ico', categoryId: '4' },
+            { id: '37', name: '12306', url: 'https://www.12306.cn', categoryId: '4' },
         ];
         
         // 存入本地存储

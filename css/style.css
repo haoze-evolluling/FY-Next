@@ -272,11 +272,12 @@ body.dark-mode .bookmarks-list::-webkit-scrollbar-thumb:hover {
     background-color: rgba(255, 255, 255, 0.3);
 }
 
+/* 书签样式 */
 .bookmark {
-    text-align: left;
-    transition: all var(--transition-speed) ease;
-    cursor: pointer;
-    padding: 8px 10px;
+    width: 100%;
+    padding: 10px 15px;
+    background-color: var(--bookmark-bg);
+    border: 1px solid var(--bookmark-border);
     border-radius: var(--button-radius);
     position: relative;
     display: flex;
@@ -287,32 +288,6 @@ body.dark-mode .bookmarks-list::-webkit-scrollbar-thumb:hover {
 .bookmark:hover {
     transform: translateY(-2px);
     background-color: rgba(255, 255, 255, 0.5);
-}
-
-.bookmark-icon {
-    width: 19px;
-    height: 19px;
-    border-radius: 6px;
-    overflow: hidden;
-    background-color: var(--card-bg);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 3px 8px var(--shadow-color);
-    transition: all var(--transition-speed) ease;
-    border: 1px solid rgba(0, 0, 0, 0.05);
-    flex-shrink: 0;
-}
-
-.bookmark:hover .bookmark-icon {
-    transform: scale(1.05);
-    box-shadow: 0 5px 15px var(--shadow-color);
-}
-
-.bookmark-icon img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
 }
 
 .bookmark-name {
@@ -330,16 +305,6 @@ body.dark-mode .bookmarks-list::-webkit-scrollbar-thumb:hover {
 a.bookmark-name:hover {
     color: var(--primary-color);
     text-decoration: underline;
-}
-
-/* 添加图标链接样式 */
-.bookmark-icon-link {
-    display: block;
-    text-decoration: none;
-}
-
-.bookmark-icon-link:hover .bookmark-icon {
-    transform: translateY(-2px) scale(1.05);
 }
 
 .bookmark-actions {
@@ -616,11 +581,6 @@ a.bookmark-name:hover {
     .bookmark {
         padding: 6px 8px;
         gap: 8px;
-    }
-    
-    .bookmark-icon {
-        width: 17px;
-        height: 17px;
     }
     
     .bookmark-name {

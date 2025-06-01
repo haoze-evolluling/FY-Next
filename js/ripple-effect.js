@@ -5,12 +5,10 @@
 document.addEventListener('DOMContentLoaded', function() {
     // 需要添加波纹效果的元素选择器
     const rippleSelectors = [
-        '.bookmark-icon-link', 
         '.search-engine-btn', 
         '.icon-btn', 
         '.category-actions button', 
         '.bookmark-actions button'
-        // 已移除 '.bookmark-name' 和 'a'
     ];
 
     // 排除不需要波纹效果的元素
