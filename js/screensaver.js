@@ -12,19 +12,24 @@ const Screensaver = (function() {
     let clockElem;
     let dateElem;
     let particlesContainer;
+    let clockContainer;
     let isScreensaverActive = false;
     let timeUpdateInterval; // 添加时间更新定时器变量
+    let contentContainer; // 主内容容器
     
     // 初始化
     const initialize = () => {
         // 创建屏保DOM元素
         createScreensaver();
         
+        // 获取主内容容器
+        contentContainer = document.querySelector('.container');
+        
         // 设置事件监听
         setupEventListeners();
         
-        // 打开网页时立即显示屏保
-        showScreensaver();
+        // 移除首次自动显示屏保的功能
+        // showScreensaver();
         
         // 启动空闲检测
         resetIdleTimer();
@@ -37,7 +42,7 @@ const Screensaver = (function() {
         screensaverElem.className = 'screensaver';
         
         // 创建时钟容器
-        const clockContainer = document.createElement('div');
+        clockContainer = document.createElement('div');
         clockContainer.className = 'clock-container';
         
         // 创建时钟元素
@@ -63,6 +68,9 @@ const Screensaver = (function() {
         
         // 添加到文档
         document.body.appendChild(screensaverElem);
+        
+        // 添加点击屏保时钟时也退出屏保的功能
+        clockContainer.addEventListener('click', hideScreensaver);
     };
     
     // 创建粒子效果
@@ -92,25 +100,66 @@ const Screensaver = (function() {
     
     // 设置事件监听
     const setupEventListeners = () => {
-        // 鼠标移动
-        document.addEventListener('mousemove', handleUserActivity);
+        // 鼠标移动 - 单独处理鼠标移动事件
+        document.addEventListener('mousemove', handleMouseMove);
         
-        // 点击
-        document.addEventListener('click', handleUserActivity);
+        // 点击 - 点击事件需要特殊处理，避免点击时钟区域时触发
+        document.addEventListener('click', handleClickActivity);
         
         // 触摸
         document.addEventListener('touchstart', handleUserActivity);
         
         // 键盘
         document.addEventListener('keydown', handleUserActivity);
+        
+        // 窗口失焦时也显示屏保
+        window.addEventListener('blur', () => {
+            showScreensaver();
+        });
+        
+        // 窗口尺寸变化时调整粒子位置
+        window.addEventListener('resize', () => {
+            if (isScreensaverActive) {
+                updateParticlesPosition();
+            }
+        });
     };
     
-    // 处理用户活动
-    const handleUserActivity = () => {
+    // 更新粒子位置
+    const updateParticlesPosition = () => {
+        const particles = particlesContainer.querySelectorAll('.particle');
+        particles.forEach(particle => {
+            particle.style.top = `${Math.random() * 200 - 100}px`;
+            particle.style.left = `${Math.random() * 200 - 100}px`;
+        });
+    };
+    
+    // 处理鼠标移动事件 - 始终允许鼠标移动退出屏保
+    const handleMouseMove = (e) => {
         if (isScreensaverActive) {
             hideScreensaver();
         }
+        resetIdleTimer();
+    };
+    
+    // 处理点击事件 - 只有在点击屏保以外的区域才触发退出
+    const handleClickActivity = (e) => {
+        // 如果事件来自屏保元素本身，则不触发退出
+        if (e && e.target && screensaverElem.contains(e.target)) {
+            return;
+        }
         
+        if (isScreensaverActive) {
+            hideScreensaver();
+        }
+        resetIdleTimer();
+    };
+    
+    // 处理用户活动（通用处理函数，用于触摸和键盘事件）
+    const handleUserActivity = (e) => {
+        if (isScreensaverActive) {
+            hideScreensaver();
+        }
         resetIdleTimer();
     };
     
@@ -131,15 +180,48 @@ const Screensaver = (function() {
         clearInterval(timeUpdateInterval);
         timeUpdateInterval = setInterval(updateTime, 1000);
         
+        // 隐藏主内容
+        if (contentContainer) {
+            contentContainer.classList.add('content-hidden');
+        }
+        
+        // 为时钟容器添加入场动画
+        clockContainer.style.opacity = '0';
+        clockContainer.style.transform = 'scale(0.9)';
+        
         // 显示屏保
         screensaverElem.classList.add('active');
+        
+        // 延迟一下再显示时钟容器，产生平滑过渡效果
+        setTimeout(() => {
+            clockContainer.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            clockContainer.style.opacity = '1';
+            clockContainer.style.transform = 'scale(1)';
+        }, 300);
+        
         isScreensaverActive = true;
     };
     
     // 隐藏屏保
     const hideScreensaver = () => {
-        screensaverElem.classList.remove('active');
-        isScreensaverActive = false;
+        // 如果屏保未激活，则直接返回
+        if (!isScreensaverActive) return;
+        
+        // 为时钟容器添加退场动画
+        clockContainer.style.opacity = '0';
+        clockContainer.style.transform = 'scale(0.9)';
+        
+        // 延迟一下再隐藏屏保，让动画有时间完成
+        setTimeout(() => {
+            screensaverElem.classList.remove('active');
+            
+            // 显示主内容
+            if (contentContainer) {
+                contentContainer.classList.remove('content-hidden');
+            }
+            
+            isScreensaverActive = false;
+        }, 300);
     };
     
     // 更新时间显示

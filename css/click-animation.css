@@ -1,0 +1,70 @@
+/* 点击动画效果 */
+.bookmark-name,
+.bookmark-icon-link,
+.search-engine-btn,
+.icon-btn,
+.category-actions button,
+.bookmark-actions button,
+a {
+    position: relative;
+    overflow: hidden;
+    transform: translateZ(0); /* 优化动画性能 */
+    transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 特别强调文字链接的缩放效果 */
+.bookmark-name:active {
+    transform: scale(0.95) !important;
+}
+
+.bookmark-icon-link:active,
+.search-engine-btn:active,
+.icon-btn:active,
+.category-actions button:active,
+.bookmark-actions button:active,
+a:active:not(.bookmark-name) {
+    transform: scale(0.96);
+}
+
+/* 波纹效果容器 - 注意：不会应用于超链接文本，因为它们在JS中被排除了 */
+.ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(67, 97, 238, 0.25);
+    transform: scale(0);
+    opacity: 1;
+    animation: ripple-effect 0.75s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
+    z-index: 0; /* 确保波纹在内容下层 */
+}
+
+/* 删除按钮的特殊效果 */
+.delete-btn .ripple,
+.delete-bookmark-btn .ripple {
+    background: rgba(255, 59, 48, 0.25);
+}
+
+@keyframes ripple-effect {
+    0% {
+        transform: scale(0);
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+    100% {
+        transform: scale(2.5);
+        opacity: 0;
+    }
+}
+
+/* 为暗黑模式调整动画颜色 */
+body.dark-mode .ripple {
+    background: rgba(76, 201, 240, 0.25);
+}
+
+/* 暗黑模式下删除按钮的特殊效果 */
+body.dark-mode .delete-btn .ripple,
+body.dark-mode .delete-bookmark-btn .ripple {
+    background: rgba(255, 69, 58, 0.25);
+} 

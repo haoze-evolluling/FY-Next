@@ -15,6 +15,16 @@
         
         // 设置拖放功能（如果需要后期实现）
         // setupDragAndDrop();
+        
+        // 自动聚焦到搜索框
+        setTimeout(() => {
+            const searchInput = document.getElementById('search-input');
+            if (searchInput) {
+                searchInput.focus();
+                // 可选：选中搜索框中的所有文本（如果有的话）
+                searchInput.select();
+            }
+        }, 100); // 短暂延迟确保页面已完全加载
     });
     
     // 设置键盘快捷键
