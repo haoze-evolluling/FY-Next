@@ -16,14 +16,14 @@
             name: '必应',
             url: 'https://www.bing.com/search?q='
         },
-        mita: {
-            name: '秘塔AI搜索',
-            url: 'https://www.metaso.cn/search?q='
+        sogou: {
+            name: '神马搜索',
+            url: 'https://m.sm.cn/s?q='
         }
     };
     
     // 默认搜索引擎
-    let currentSearchEngine = localStorage.getItem('preferred_search_engine') || 'mita';
+    let currentSearchEngine = localStorage.getItem('preferred_search_engine') || 'bing';
     
     // DOM元素
     const searchInput = document.getElementById('search-input');
