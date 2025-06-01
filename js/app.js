@@ -13,6 +13,13 @@
         // 设置键盘快捷键
         setupKeyboardShortcuts();
         
+        // 初始化图标处理
+        setTimeout(() => {
+            if (typeof IconHandler !== 'undefined') {
+                IconHandler.refreshAllIcons();
+            }
+        }, 300); // 延迟一点时间确保书签已加载
+        
         // 设置拖放功能（如果需要后期实现）
         // setupDragAndDrop();
         

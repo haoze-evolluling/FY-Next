@@ -43,7 +43,7 @@ const Storage = (function() {
             { id: '33', name: '百度', url: 'https://www.baidu.com', icon: 'https://www.baidu.com/favicon.ico', categoryId: '4' },
             { id: '34', name: '高德地图', url: 'https://www.amap.com', icon: 'https://www.amap.com/favicon.ico', categoryId: '4' },
             { id: '35', name: 'WPS', url: 'https://www.wps.cn', icon: 'https://www.wps.cn/favicon.ico', categoryId: '4' },
-            { id: '36', name: '豆包', url: 'https://www.doubao.com', icon: 'https://www.doubao.com/favicon.ico', categoryId: '4' },
+            { id: '36', name: '豆包', url: 'https://www.doubao.com', categoryId: '4' },
             { id: '37', name: '12306', url: 'https://www.12306.cn', icon: 'https://www.12306.cn/favicon.ico', categoryId: '4' },
         ];
         
@@ -130,7 +130,7 @@ const Storage = (function() {
             id: Date.now().toString(),
             name: name,
             url: url,
-            icon: icon || getFaviconUrl(url), // 使用新的图标获取函数
+            icon: icon || getFaviconUrl(url).primary, // 使用新的图标获取函数的primary图标
             categoryId: categoryId
         };
         
@@ -142,17 +142,20 @@ const Storage = (function() {
     // 获取网站图标的函数
     const getFaviconUrl = (url) => {
         try {
-            // 1. 首先尝试从Bing获取图标
-            const bingFaviconUrl = `https://www.bing.com/favicon/search?url=${domain}`;
+            // 提取域名
+            const urlObj = new URL(url);
+            const domain = urlObj.hostname;
             
-            // 2. 如果Bing失败，尝试从百度获取图标
-            const baiduFaviconUrl = `https://statics.dnspod.cn/proxy_favicon/_/favicon?domain=${domain}`;
-            
-            // 3. 如果都失败，直接使用网站的favicon.ico
+            // 直接使用网站的favicon.ico
             const directFaviconUrl = `https://${domain}/favicon.ico`;
             
-            // 返回备选图标URL数组
-            return [bingFaviconUrl, baiduFaviconUrl, directFaviconUrl];
+            // 只返回网站自身图标，不提供备选方案
+            return {
+                primary: directFaviconUrl,
+                fallback1: null,
+                fallback2: null,
+                default: "images/default-icon.png"
+            };
         } catch (error) {
             // 如果URL解析失败，返回默认图标
             console.error("图标获取失败:", error);
@@ -237,7 +240,8 @@ const Storage = (function() {
         updateBookmark,
         deleteBookmark,
         exportData,
-        importData
+        importData,
+        getFaviconUrl
     };
 })();
  
