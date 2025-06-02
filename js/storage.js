@@ -159,16 +159,16 @@ const Storage = (function() {
                 fallback2: `https://www.google.com/s2/favicons?domain=${domain}`,
                 
                 // 4. 最后的默认图标
-                default: "internet.png"
+                default: "pic/internet.png"
             };
         } catch (error) {
             // 如果URL解析失败，返回默认图标
             console.error("图标获取失败:", error);
             return {
-                primary: "internet.png",
+                primary: "pic/internet.png",
                 fallback1: null,
                 fallback2: null,
-                default: "internet.png"
+                default: "pic/internet.png"
             };
         }
     };

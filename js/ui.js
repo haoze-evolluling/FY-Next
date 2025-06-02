@@ -201,7 +201,7 @@ const UI = (function() {
                     
                     // 3. 如果仍然失败，使用本地默认图标
                     this.onerror = function() {
-                        this.src = 'internet.png';
+                        this.src = 'pic/internet.png';
                         // 防止继续触发onerror事件
                         this.onerror = null;
                     };
@@ -210,7 +210,7 @@ const UI = (function() {
         } catch (error) {
             // 如果URL解析失败，使用默认图标
             console.error("图标URL解析失败:", error);
-            iconElement.src = 'internet.png';
+            iconElement.src = 'pic/internet.png';
         }
         
         // 添加图标和文本到链接
@@ -431,4 +431,4 @@ const UI = (function() {
         initialize,
         renderBookmarks
     };
-})(); 
+})();
