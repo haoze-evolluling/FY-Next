@@ -16,16 +16,22 @@ body.dark-mode {
 body.dark-mode .search-input-wrapper {
     background-color: rgba(40, 40, 40, 0.8);
     border: 1px solid #333333;
+    border-radius: 30px; /* 确保有圆角 */
 }
 
 body.dark-mode #search-input {
     color: #e0e0e0;
+    background-color: transparent;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 body.dark-mode .search-engine-btn {
     background-color: rgba(40, 40, 40, 0.8);
     color: #aaaaaa;
     border: 1px solid #333333;
+    box-sizing: border-box;
+    padding: 5px 11px; /* 减少1px以补偿边框宽度 */
+    height: 32px; /* 与普通模式保持相同高度 */
 }
 
 body.dark-mode .search-engine-btn:hover {
@@ -162,4 +168,18 @@ body.dark-mode .bookmark-actions button.delete-bookmark-btn:hover {
 
 body.dark-mode .bookmarks-list::-webkit-scrollbar-thumb {
     background-color: rgba(0, 204, 122, 0.3);
+}
+
+/* 图标切换动画 */
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.icon-spin {
+    animation: spin 0.5s ease-in-out;
 } 

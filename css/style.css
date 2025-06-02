@@ -24,7 +24,7 @@
 body {
     font-family: 'Noto Sans SC', 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
     color: var(--text-color);
-    background: url('../sky01.png') no-repeat center center fixed;
+    background: url('../pic/sky01.png') no-repeat center center fixed;
     background-size: cover;
     min-height: 100vh;
     transition: all var(--transition-speed) ease;
@@ -72,6 +72,8 @@ header {
 /* 搜索框样式 */
 .search-input-wrapper {
     position: relative;
+    background-color: transparent;
+    border: none;
 }
 
 .search-icon {
@@ -88,11 +90,11 @@ header {
     padding: 12px 20px 12px 45px;
     border: 2px solid transparent;
     border-radius: 30px;
-    background-color: var(--card-bg);
+    background-color: transparent;
     font-size: 1rem;
     outline: none;
     transition: all var(--transition-speed) ease;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    box-shadow: none;
 }
 
 #search-input:focus {
@@ -119,6 +121,8 @@ header {
     display: flex;
     align-items: center;
     gap: 5px;
+    box-sizing: border-box;
+    height: 32px;
 }
 
 .search-engine-btn i {

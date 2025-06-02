@@ -1,28 +1,31 @@
 /**
- * 黑暗模式切换功能
+ * 黑暗模式切换功能（已修改为仅暗黑模式）
  */
 (function() {
     // DOM元素
     const darkModeToggle = document.getElementById('dark-mode-toggle');
     const body = document.body;
     
-    // 检查本地存储中的偏好设置
-    const isDarkMode = localStorage.getItem('darkMode') === 'true';
+    // 在页面加载时强制启用暗黑模式
+    enableDarkMode();
     
-    // 初始化
-    if (isDarkMode) {
-        enableDarkMode();
-    } else {
-        disableDarkMode();
-    }
+    // 切换按钮仅改变图标
+    let isIconToggled = false;
     
     // 切换事件监听器
     darkModeToggle.addEventListener('click', () => {
-        if (body.classList.contains('dark-mode')) {
-            disableDarkMode();
+        if (isIconToggled) {
+            darkModeToggle.innerHTML = '<i class="bi bi-sun-fill"></i>';
         } else {
-            enableDarkMode();
+            darkModeToggle.innerHTML = '<i class="bi bi-moon-stars-fill"></i>';
         }
+        isIconToggled = !isIconToggled;
+        
+        // 添加一个小动画效果
+        darkModeToggle.classList.add('icon-spin');
+        setTimeout(() => {
+            darkModeToggle.classList.remove('icon-spin');
+        }, 500);
     });
     
     // 启用黑暗模式
@@ -32,20 +35,11 @@
         localStorage.setItem('darkMode', 'true');
     }
     
-    // 禁用黑暗模式
+    // 不再需要禁用暗黑模式的函数，但为了代码结构保留它
     function disableDarkMode() {
-        body.classList.remove('dark-mode');
-        darkModeToggle.innerHTML = '<i class="bi bi-moon-fill"></i>';
-        localStorage.setItem('darkMode', 'false');
+        // 这个函数不再被调用
+        // 保留作为占位符
     }
     
-    // 监听系统偏好变化
-    const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
-    prefersDarkScheme.addEventListener('change', (e) => {
-        if (e.matches) {
-            enableDarkMode();
-        } else {
-            disableDarkMode();
-        }
-    });
+    // 系统偏好监听（移除响应系统切换的行为）
 })(); 
