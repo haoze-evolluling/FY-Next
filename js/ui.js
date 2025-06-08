@@ -95,20 +95,160 @@ const UI = (function() {
             // 过滤出属于该分类的书签
             const categoryBookmarks = bookmarks.filter(bookmark => bookmark.categoryId === category.id);
             
+            // 按order属性排序书签（如果有）
+            categoryBookmarks.sort((a, b) => {
+                return (a.order || 9999) - (b.order || 9999);
+            });
+            
             // 如果该分类没有书签，显示空状态
             if (categoryBookmarks.length === 0) {
                 categoryElem.querySelector('.bookmarks-list').innerHTML = `<div class="empty-bookmarks">暂无网站，点击"+"添加</div>`;
             } else {
                 // 渲染书签
+                const bookmarksList = categoryElem.querySelector('.bookmarks-list');
                 categoryBookmarks.forEach(bookmark => {
                     const bookmarkElem = createBookmarkElement(bookmark);
-                    categoryElem.querySelector('.bookmarks-list').appendChild(bookmarkElem);
+                    bookmarksList.appendChild(bookmarkElem);
                 });
+                
+                // 设置拖拽排序功能
+                setupDragAndDrop(bookmarksList, category.id);
             }
             
             // 添加事件监听器
             setupCategoryEvents(categoryElem, category);
         });
+    };
+    
+    // 设置拖拽排序功能
+    const setupDragAndDrop = (container, categoryId) => {
+        // 获取容器内所有书签元素
+        const bookmarkElements = Array.from(container.querySelectorAll('.bookmark'));
+        
+        // 如果只有一个或没有书签，不需要设置拖拽功能
+        if (bookmarkElements.length <= 1) return;
+        
+        // 给每个书签设置拖拽属性和事件
+        bookmarkElements.forEach(bookmark => {
+            // 设置拖拽属性
+            bookmark.setAttribute('draggable', 'true');
+            
+            // 添加拖拽图标提示（如果还没有）
+            if (!bookmark.querySelector('.drag-handle')) {
+                const dragHandle = document.createElement('div');
+                dragHandle.className = 'drag-handle';
+                dragHandle.innerHTML = '<i class="bi bi-grip-vertical"></i>';
+                bookmark.insertBefore(dragHandle, bookmark.firstChild);
+            }
+            
+            // 移除旧的事件监听器（防止重复绑定）
+            bookmark.removeEventListener('dragstart', handleDragStart);
+            bookmark.removeEventListener('dragend', handleDragEnd);
+            bookmark.removeEventListener('dragenter', handleDragEnter);
+            bookmark.removeEventListener('dragleave', handleDragLeave);
+            bookmark.removeEventListener('dragover', handleDragOver);
+            bookmark.removeEventListener('drop', handleDrop);
+            
+            // 设置拖拽开始事件
+            bookmark.addEventListener('dragstart', handleDragStart);
+            
+            // 设置拖拽结束事件
+            bookmark.addEventListener('dragend', handleDragEnd);
+            
+            // 设置拖拽进入事件
+            bookmark.addEventListener('dragenter', handleDragEnter);
+            
+            // 设置拖拽离开事件
+            bookmark.addEventListener('dragleave', handleDragLeave);
+            
+            // 设置拖拽经过事件
+            bookmark.addEventListener('dragover', handleDragOver);
+            
+            // 设置拖拽放置事件
+            bookmark.addEventListener('drop', function(e) {
+                handleDrop(e, this, container, categoryId);
+            });
+        });
+        
+        // 拖拽开始处理函数
+        function handleDragStart(e) {
+            e.dataTransfer.setData('text/plain', this.dataset.id);
+            this.classList.add('dragging');
+            
+            // 延迟添加拖拽效果类，以便看到起始位置
+            setTimeout(() => {
+                bookmarkElements.forEach(item => {
+                    if (item !== this) {
+                        item.classList.add('drag-over-allowed');
+                    }
+                });
+            }, 50);
+        }
+        
+        // 拖拽结束处理函数
+        function handleDragEnd() {
+            this.classList.remove('dragging');
+            bookmarkElements.forEach(item => {
+                item.classList.remove('drag-over-allowed');
+                item.classList.remove('drag-over');
+            });
+        }
+        
+        // 拖拽进入处理函数
+        function handleDragEnter(e) {
+            e.preventDefault();
+            if (this !== document.querySelector('.dragging')) {
+                this.classList.add('drag-over');
+            }
+        }
+        
+        // 拖拽离开处理函数
+        function handleDragLeave() {
+            this.classList.remove('drag-over');
+        }
+        
+        // 拖拽经过处理函数
+        function handleDragOver(e) {
+            e.preventDefault();
+        }
+        
+        // 拖拽放置处理函数
+        function handleDrop(e, bookmark, container, categoryId) {
+            e.preventDefault();
+            
+            // 获取被拖拽书签的ID
+            const draggedId = e.dataTransfer.getData('text/plain');
+            const draggedElement = document.querySelector(`.bookmark[data-id="${draggedId}"]`);
+            
+            if (draggedElement && draggedElement !== bookmark) {
+                // 确定放置位置
+                const rect = bookmark.getBoundingClientRect();
+                const middle = (rect.top + rect.bottom) / 2;
+                const insertBefore = e.clientY < middle;
+                
+                // 执行DOM排序
+                if (insertBefore) {
+                    container.insertBefore(draggedElement, bookmark);
+                } else {
+                    container.insertBefore(draggedElement, bookmark.nextSibling);
+                }
+                
+                // 保存新的书签顺序
+                saveBookmarkOrder(container, categoryId);
+            }
+            
+            bookmark.classList.remove('drag-over');
+        }
+    };
+    
+    // 保存书签新顺序
+    const saveBookmarkOrder = (container, categoryId) => {
+        // 获取容器中的所有书签ID，按当前顺序
+        const bookmarkIds = Array.from(container.querySelectorAll('.bookmark'))
+            .map(elem => elem.dataset.id);
+        
+        // 保存到Storage
+        Storage.updateBookmarkOrder(categoryId, bookmarkIds);
     };
     
     // 创建分类元素

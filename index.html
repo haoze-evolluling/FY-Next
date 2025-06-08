@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="css/screensaver.css">
     <link rel="stylesheet" href="css/click-animation.css">
     <link rel="stylesheet" href="css/fix.css">
+    <link rel="stylesheet" href="css/preferences.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -33,6 +34,9 @@
                 </div>
             </div>
             <div class="controls">
+                <button id="preferences-btn" class="icon-btn" title="个性化设置">
+                    <i class="bi bi-palette-fill"></i>
+                </button>
                 <button id="dark-mode-toggle" class="icon-btn" title="切换主题模式">
                     <i class="bi bi-moon-fill"></i>
                 </button>
@@ -85,16 +89,200 @@
                 </div>
             </div>
         </div>
+
+        <!-- 个性化设置模态框 -->
+        <div id="preferences-modal" class="modal">
+            <div class="modal-content preferences-modal-content">
+                <div class="modal-header">
+                    <h3><i class="bi bi-palette"></i> 个性化设置</h3>
+                    <button class="close-modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="preferences-tabs">
+                        <button class="tab-btn active" data-tab="appearance">外观</button>
+                        <button class="tab-btn" data-tab="layout">布局</button>
+                        <button class="tab-btn" data-tab="background">背景</button>
+                    </div>
+                    
+                    <div class="tab-content active" id="appearance-tab">
+                        <div class="form-group">
+                            <label><i class="bi bi-palette2"></i> 主题模式</label>
+                            <div class="theme-selector">
+                                <button class="theme-option" data-theme="light">
+                                    <div class="theme-preview light-preview"></div>
+                                    <span>明亮</span>
+                                </button>
+                                <button class="theme-option" data-theme="dark">
+                                    <div class="theme-preview dark-preview"></div>
+                                    <span>暗黑</span>
+                                </button>
+                                <button class="theme-option" data-theme="auto">
+                                    <div class="theme-preview auto-preview"></div>
+                                    <span>自动</span>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label><i class="bi bi-palette"></i> 强调色</label>
+                            <div class="color-picker-container">
+                                <input type="color" id="accent-color" value="#4a6cf7">
+                                <span class="color-value">#4a6cf7</span>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label><i class="bi bi-card-heading"></i> 卡片样式</label>
+                            <div class="card-style-selector">
+                                <button class="card-style-option" data-style="default">
+                                    <div class="card-preview default-card"></div>
+                                    <span>默认</span>
+                                </button>
+                                <button class="card-style-option" data-style="rounded">
+                                    <div class="card-preview rounded-card"></div>
+                                    <span>圆角</span>
+                                </button>
+                                <button class="card-style-option" data-style="flat">
+                                    <div class="card-preview flat-card"></div>
+                                    <span>扁平</span>
+                                </button>
+                                <button class="card-style-option" data-style="bordered">
+                                    <div class="card-preview bordered-card"></div>
+                                    <span>边框</span>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label><i class="bi bi-toggles"></i> 动画效果</label>
+                            <label class="switch">
+                                <input type="checkbox" id="animation-toggle" checked>
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="tab-content" id="layout-tab">
+                        <div class="form-group">
+                            <label><i class="bi bi-grid"></i> 布局方式</label>
+                            <div class="layout-selector">
+                                <button class="layout-option" data-layout="grid">
+                                    <div class="layout-preview grid-preview">
+                                        <div class="grid-item"></div>
+                                        <div class="grid-item"></div>
+                                        <div class="grid-item"></div>
+                                        <div class="grid-item"></div>
+                                    </div>
+                                    <span>网格</span>
+                                </button>
+                                <button class="layout-option" data-layout="list">
+                                    <div class="layout-preview list-preview">
+                                        <div class="list-item"></div>
+                                        <div class="list-item"></div>
+                                        <div class="list-item"></div>
+                                    </div>
+                                    <span>列表</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="tab-content" id="background-tab">
+                        <div class="form-group">
+                            <label><i class="bi bi-image"></i> 背景类型</label>
+                            <div class="background-type-selector">
+                                <button class="bg-type-option" data-type="default">
+                                    <i class="bi bi-circle"></i>
+                                    <span>默认</span>
+                                </button>
+                                <button class="bg-type-option" data-type="color">
+                                    <i class="bi bi-palette"></i>
+                                    <span>纯色</span>
+                                </button>
+                                <button class="bg-type-option" data-type="image">
+                                    <i class="bi bi-image"></i>
+                                    <span>图片</span>
+                                </button>
+                                <button class="bg-type-option" data-type="gradient">
+                                    <i class="bi bi-rainbow"></i>
+                                    <span>渐变</span>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group bg-option" id="bg-color-option">
+                            <label>选择背景颜色</label>
+                            <div class="color-picker-container">
+                                <input type="color" id="bg-color" value="#f5f5f5">
+                                <span class="color-value">#f5f5f5</span>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group bg-option" id="bg-image-option">
+                            <label>背景图片</label>
+                            <div class="image-upload-container">
+                                <input type="url" id="bg-image-url" placeholder="输入图片URL">
+                                <span>或</span>
+                                <label for="bg-image-upload" class="upload-btn">
+                                    <i class="bi bi-upload"></i> 上传图片
+                                </label>
+                                <input type="file" id="bg-image-upload" accept="image/*" style="display:none">
+                            </div>
+                            <div class="bg-image-preview"></div>
+                        </div>
+                        
+                        <div class="form-group bg-option" id="bg-gradient-option">
+                            <label>渐变设置</label>
+                            <div class="gradient-controls">
+                                <div class="gradient-colors">
+                                    <div class="color-picker-container">
+                                        <input type="color" id="gradient-color-1" value="#4a6cf7">
+                                        <span class="color-value">#4a6cf7</span>
+                                    </div>
+                                    <div class="color-picker-container">
+                                        <input type="color" id="gradient-color-2" value="#6a3093">
+                                        <span class="color-value">#6a3093</span>
+                                    </div>
+                                </div>
+                                <select id="gradient-direction">
+                                    <option value="to right">从左到右</option>
+                                    <option value="to bottom">从上到下</option>
+                                    <option value="to bottom right">对角线</option>
+                                    <option value="circle">径向</option>
+                                </select>
+                            </div>
+                            <div class="gradient-preview"></div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label><i class="bi bi-droplet-half"></i> 背景模糊</label>
+                            <div class="range-slider">
+                                <input type="range" min="0" max="20" value="0" id="blur-range">
+                                <span class="range-value">0px</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="preferences-actions">
+                        <button id="reset-preferences" class="btn-secondary">
+                            <i class="bi bi-arrow-counterclockwise"></i> 重置
+                        </button>
+                        <button id="save-preferences" class="btn-primary">
+                            <i class="bi bi-check-lg"></i> 保存
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     
-    
-
     <script src="js/lightmode.js"></script>
     <script src="js/storage.js"></script>
     <script src="js/ui.js"></script>
     <script src="js/search.js"></script>
     <script src="js/screensaver.js"></script>
     <script src="js/ripple-effect.js"></script>
+    <script src="js/preferences.js"></script>
     <script src="js/app.js"></script>
 </body>
 </html>

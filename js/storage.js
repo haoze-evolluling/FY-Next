@@ -5,6 +5,21 @@ const Storage = (function() {
     // 存储键名
     const BOOKMARKS_KEY = 'yunji_bookmarks';
     const CATEGORIES_KEY = 'yunji_categories';
+    const PREFERENCES_KEY = 'yunji_preferences';
+    
+    // 默认偏好设置
+    const DEFAULT_PREFERENCES = {
+        theme: 'light',                // 主题模式: 'light' 或 'dark'
+        background: {
+            type: 'default',           // 背景类型: 'default', 'color', 'image', 'gradient'
+            value: null                // 背景值: 颜色代码, 图片URL或渐变值
+        },
+        accentColor: '#4a6cf7',        // 强调色
+        cardStyle: 'default',          // 卡片样式: 'default', 'rounded', 'flat', 'bordered'
+        animation: true,               // 是否启用动画
+        layout: 'grid',                // 布局方式: 'grid' 或 'list'
+        blur: 0                        // 背景模糊值(px)
+    };
     
     // 初始化默认分类和书签
     const initializeDefaults = () => {
@@ -203,6 +218,36 @@ const Storage = (function() {
         };
     };
     
+    // 更新书签顺序
+    const updateBookmarkOrder = (categoryId, orderedBookmarkIds) => {
+        const bookmarks = getBookmarks();
+        
+        // 创建一个映射以便于快速查询
+        const bookmarksMap = {};
+        bookmarks.forEach(bookmark => {
+            bookmarksMap[bookmark.id] = bookmark;
+        });
+        
+        // 为指定分类下的书签设置排序顺序
+        const categoryBookmarks = bookmarks.filter(bookmark => bookmark.categoryId === categoryId);
+        orderedBookmarkIds.forEach((id, index) => {
+            if (bookmarksMap[id] && bookmarksMap[id].categoryId === categoryId) {
+                bookmarksMap[id].order = index;
+            }
+        });
+        
+        // 为没有排序值的书签设置默认排序
+        bookmarks.forEach(bookmark => {
+            if (bookmark.order === undefined) {
+                bookmark.order = 9999; // 默认放在末尾
+            }
+        });
+        
+        localStorage.setItem(BOOKMARKS_KEY, JSON.stringify(bookmarks));
+        
+        return bookmarks;
+    };
+    
     // 导出所有数据
     const exportData = () => {
         const data = {
@@ -239,6 +284,37 @@ const Storage = (function() {
         }
     };
     
+    // 获取用户偏好设置
+    const getPreferences = () => {
+        const preferencesJSON = localStorage.getItem(PREFERENCES_KEY);
+        if (!preferencesJSON) {
+            return DEFAULT_PREFERENCES;
+        }
+        
+        // 合并用户设置和默认设置，确保有所有必要的属性
+        return {...DEFAULT_PREFERENCES, ...JSON.parse(preferencesJSON)};
+    };
+    
+    // 更新用户偏好设置
+    const updatePreferences = (newPreferences) => {
+        const currentPreferences = getPreferences();
+        const updatedPreferences = {...currentPreferences, ...newPreferences};
+        
+        localStorage.setItem(PREFERENCES_KEY, JSON.stringify(updatedPreferences));
+        return updatedPreferences;
+    };
+    
+    // 重置用户偏好设置
+    const resetPreferences = () => {
+        try {
+            localStorage.setItem(PREFERENCES_KEY, JSON.stringify(DEFAULT_PREFERENCES));
+            return {...DEFAULT_PREFERENCES}; // 返回深拷贝以避免引用问题
+        } catch (error) {
+            console.error('重置偏好设置失败:', error);
+            return {...DEFAULT_PREFERENCES}; // 即使失败也返回默认值
+        }
+    };
+    
     // 公开API
     return {
         getCategories,
@@ -249,9 +325,13 @@ const Storage = (function() {
         addBookmark,
         updateBookmark,
         deleteBookmark,
+        getFaviconUrl,
         exportData,
         importData,
-        getFaviconUrl
+        updateBookmarkOrder,
+        getPreferences,
+        updatePreferences,
+        resetPreferences
     };
 })();
  

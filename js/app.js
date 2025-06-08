@@ -8,7 +8,25 @@
         UI.initialize();
 
         // 初始化屏保
-        Screensaver.initialize();
+        if (typeof Screensaver !== 'undefined') {
+            try {
+                Screensaver.initialize();
+            } catch (error) {
+                console.error('初始化屏保失败:', error);
+            }
+        }
+        
+        // 初始化个性化设置
+        if (typeof Preferences !== 'undefined') {
+            try {
+                Preferences.initialize();
+                console.log('个性化设置初始化成功');
+            } catch (error) {
+                console.error('初始化个性化设置失败:', error);
+            }
+        } else {
+            console.error('找不到Preferences模块');
+        }
 
         // 设置键盘快捷键
         setupKeyboardShortcuts();
@@ -40,6 +58,14 @@
             // Alt + S: 使用设置按钮添加新分类
             if (e.altKey && e.key === 's') {
                 document.getElementById('settings-btn').click();
+            }
+            
+            // Alt + P: 打开个性化设置
+            if (e.altKey && e.key === 'p') {
+                const preferencesBtn = document.getElementById('preferences-btn');
+                if (preferencesBtn) {
+                    preferencesBtn.click();
+                }
             }
             
             // Esc: 关闭当前打开的模态框

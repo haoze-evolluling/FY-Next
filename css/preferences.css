@@ -1,0 +1,514 @@
+/* 个性化设置模态框样式 */
+.preferences-modal-content {
+    max-width: 600px;
+    width: 90%;
+    max-height: 80vh;
+}
+
+.preferences-tabs {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.tab-btn {
+    background: none;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    color: var(--text-color-secondary);
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.tab-btn:hover {
+    color: var(--text-color);
+}
+
+.tab-btn.active {
+    color: var(--accent-color);
+    font-weight: 500;
+}
+
+.tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--accent-color);
+}
+
+.tab-content {
+    display: none;
+    padding: 10px 0;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* 主题选择器 */
+.theme-selector {
+    display: flex;
+    justify-content: space-around;
+    margin: 15px 0;
+}
+
+.theme-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.theme-option:hover {
+    background-color: var(--hover-color);
+}
+
+.theme-option.active {
+    background-color: var(--hover-color);
+    border: 2px solid var(--accent-color);
+}
+
+.theme-preview {
+    width: 80px;
+    height: 50px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+}
+
+.light-preview {
+    background-color: #ffffff;
+    position: relative;
+}
+
+.light-preview::after {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 60px;
+    height: 10px;
+    background-color: #333;
+    border-radius: 2px;
+}
+
+.dark-preview {
+    background-color: #1a1a1a;
+    position: relative;
+}
+
+.dark-preview::after {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 60px;
+    height: 10px;
+    background-color: #eee;
+    border-radius: 2px;
+}
+
+.auto-preview {
+    background: linear-gradient(to right, #ffffff 50%, #1a1a1a 50%);
+    position: relative;
+}
+
+.auto-preview::after {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 60px;
+    height: 10px;
+    background: linear-gradient(to right, #333 50%, #eee 50%);
+    border-radius: 2px;
+}
+
+/* 颜色选择器 */
+.color-picker-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 10px 0;
+}
+
+.color-picker-container input[type="color"] {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.color-value {
+    font-family: monospace;
+    color: var(--text-color-secondary);
+}
+
+/* 卡片样式选择器 */
+.card-style-selector {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin: 15px 0;
+}
+
+.card-style-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.card-style-option:hover {
+    background-color: var(--hover-color);
+}
+
+.card-style-option.active {
+    background-color: var(--hover-color);
+    border: 2px solid var(--accent-color);
+}
+
+.card-preview {
+    width: 80px;
+    height: 50px;
+    border: 1px solid var(--border-color);
+    background-color: var(--card-bg);
+}
+
+.default-card {
+    border-radius: 4px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.rounded-card {
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.flat-card {
+    border-radius: 0;
+    box-shadow: none;
+}
+
+.bordered-card {
+    border-radius: 4px;
+    border: 2px solid var(--border-color);
+    box-shadow: none;
+}
+
+/* 开关样式 */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: var(--accent-color);
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px var(--accent-color);
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 24px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* 布局选择器 */
+.layout-selector {
+    display: flex;
+    justify-content: space-around;
+    margin: 15px 0;
+}
+
+.layout-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.layout-option:hover {
+    background-color: var(--hover-color);
+}
+
+.layout-option.active {
+    background-color: var(--hover-color);
+    border: 2px solid var(--accent-color);
+}
+
+.layout-preview {
+    width: 100px;
+    height: 60px;
+    border: 1px solid var(--border-color);
+    background-color: var(--card-bg);
+    padding: 5px;
+    border-radius: 4px;
+}
+
+.grid-preview {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5px;
+}
+
+.grid-item {
+    background-color: var(--border-color);
+    border-radius: 2px;
+    height: 20px;
+}
+
+.list-preview {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.list-item {
+    background-color: var(--border-color);
+    border-radius: 2px;
+    height: 12px;
+}
+
+/* 背景设置 */
+.background-type-selector {
+    display: flex;
+    justify-content: space-between;
+    margin: 15px 0;
+}
+
+.bg-type-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.bg-type-option:hover {
+    background-color: var(--hover-color);
+}
+
+.bg-type-option.active {
+    background-color: var(--hover-color);
+    border: 2px solid var(--accent-color);
+}
+
+.bg-type-option i {
+    font-size: 20px;
+    margin-bottom: 5px;
+}
+
+.bg-option {
+    display: none;
+}
+
+.bg-option.active {
+    display: block;
+}
+
+.image-upload-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 10px 0;
+}
+
+.image-upload-container input[type="url"] {
+    flex: 1;
+}
+
+.upload-btn {
+    display: inline-block;
+    padding: 8px 12px;
+    background-color: var(--btn-secondary-bg);
+    color: var(--btn-secondary-text);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.upload-btn:hover {
+    background-color: var(--btn-secondary-hover);
+}
+
+.bg-image-preview {
+    width: 100%;
+    height: 100px;
+    margin-top: 10px;
+    border-radius: 8px;
+    background-size: cover;
+    background-position: center;
+    border: 1px solid var(--border-color);
+}
+
+.gradient-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 10px 0;
+}
+
+.gradient-colors {
+    display: flex;
+    gap: 20px;
+}
+
+.gradient-preview {
+    width: 100%;
+    height: 60px;
+    margin-top: 10px;
+    border-radius: 8px;
+    background: linear-gradient(to right, #4a6cf7, #6a3093);
+    border: 1px solid var(--border-color);
+}
+
+.range-slider {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 10px 0;
+}
+
+.range-slider input {
+    flex: 1;
+}
+
+.range-value {
+    font-family: monospace;
+    color: var(--text-color-secondary);
+    min-width: 40px;
+    text-align: right;
+}
+
+.preferences-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
+}
+
+/* Toast 提示样式 */
+#preferences-toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--accent-color, #4a6cf7);
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 10000;
+    font-size: 14px;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+#preferences-toast.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+#preferences-toast.error {
+    background-color: #e74c3c;
+}
+
+#preferences-toast.warning {
+    background-color: #f39c12;
+}
+
+/* 确保模态框在移动设备上正确显示 */
+@media (max-width: 768px) {
+    .preferences-modal-content {
+        width: 90%;
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+    
+    .theme-selector, .card-style-selector, .layout-selector {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .theme-option, .card-style-option, .layout-option, .bg-type-option {
+        margin-bottom: 10px;
+    }
+    
+    .background-type-selector {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+} 

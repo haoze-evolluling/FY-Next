@@ -4,15 +4,23 @@
     --secondary-color: #3f37c9;
     --accent-color: #4cc9f0;
     --text-color: #333;
+    --text-color-secondary: #6c757d;
     --light-text: #6c757d;
     --bg-color: rgba(255, 255, 255, 0.85);
     --card-bg: rgba(255, 255, 255, 0.95);
     --shadow-color: rgba(0, 0, 0, 0.08);
+    --border-color: #e0e0e0;
+    --hover-color: rgba(0, 0, 0, 0.05);
+    --bookmark-bg: rgba(255, 255, 255, 0.7);
+    --bookmark-border: rgba(0, 0, 0, 0.05);
     --border-radius: 16px;
     --card-radius: 12px;
     --button-radius: 8px;
     --transition-speed: 0.3s;
     --blur-amount: 15px;
+    --btn-secondary-bg: #f0f0f0;
+    --btn-secondary-text: #333;
+    --btn-secondary-hover: #e0e0e0;
 }
 
 * {
@@ -293,6 +301,8 @@ body.dark-mode .bookmarks-list::-webkit-scrollbar-thumb:hover {
     display: flex;
     align-items: center;
     gap: 12px;
+    transition: all 0.2s ease;
+    cursor: default;
 }
 
 .bookmark:hover {
@@ -313,6 +323,7 @@ body.dark-mode .bookmarks-list::-webkit-scrollbar-thumb:hover {
     display: flex;
     align-items: center;
     gap: 8px;
+    padding-left: 24px;
 }
 
 .bookmark-icon {
@@ -370,6 +381,50 @@ a.bookmark-name:hover {
 .bookmark:hover .bookmark-actions {
     opacity: 1;
     visibility: visible;
+}
+
+/* 拖拽相关样式 */
+.drag-handle {
+    position: absolute;
+    left: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.3;
+    cursor: grab;
+    color: var(--text-color);
+    transition: opacity 0.2s ease;
+    padding: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    width: 16px;
+    height: 16px;
+}
+
+.bookmark:hover .drag-handle {
+    opacity: 0.7;
+}
+
+.drag-handle:hover {
+    opacity: 1 !important;
+}
+
+.bookmark.dragging {
+    opacity: 0.7;
+    transform: scale(1.02);
+    z-index: 99;
+    border: 1px dashed var(--border-color);
+    background-color: rgba(200, 200, 200, 0.3);
+    cursor: grabbing;
+}
+
+.bookmark.drag-over {
+    border-top: 2px solid var(--accent-color);
+}
+
+.bookmark.drag-over-allowed {
+    transition: all 0.2s ease;
 }
 
 /* 浮动按钮 */
@@ -645,4 +700,50 @@ a.bookmark-name:hover {
 /* 删除页脚样式 */
 .site-footer {
     display: none;
+}
+
+/* 布局样式 */
+.layout-grid #bookmarks-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.layout-list #bookmarks-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.layout-list .category {
+    max-width: 100%;
+}
+
+/* 卡片样式 */
+.card-default .category {
+    border-radius: 4px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card-rounded .category {
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card-flat .category {
+    border-radius: 0;
+    box-shadow: none;
+    border: 1px solid var(--border-color);
+}
+
+.card-bordered .category {
+    border-radius: 4px;
+    border: 2px solid var(--border-color);
+    box-shadow: none;
+}
+
+/* 动画控制 */
+.no-animations * {
+    transition: none !important;
+    animation: none !important;
 } 
