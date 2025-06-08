@@ -3,6 +3,9 @@
     max-width: 600px;
     width: 90%;
     max-height: 80vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
 }
 
 .preferences-tabs {
@@ -452,11 +455,69 @@ input:checked + .slider:before {
 
 .preferences-actions {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     gap: 10px;
     margin-top: 20px;
     padding-top: 20px;
     border-top: 1px solid var(--border-color);
+    position: sticky;
+    bottom: 0;
+    background: var(--card-bg);
+    padding-bottom: 10px;
+    z-index: 10;
+}
+
+/* 重置按钮样式优化 */
+#reset-preferences {
+    background-color: var(--btn-secondary-bg, #f0f0f0);
+    color: var(--btn-secondary-text, #333);
+    border: 1px solid var(--border-color, #ddd);
+    padding: 10px 16px;
+    border-radius: var(--button-radius, 4px);
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    box-shadow: none;
+}
+
+#reset-preferences:hover {
+    background-color: var(--btn-secondary-hover, #e5e5e5);
+}
+
+#reset-preferences i {
+    font-size: 1rem;
+}
+
+/* 保存按钮样式微调，保持与主题一致 */
+#save-preferences {
+    background-color: var(--accent-color, #4a6cf7);
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: var(--button-radius, 4px);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.95rem;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    box-shadow: 0 4px 10px rgba(74, 108, 247, 0.3);
+}
+
+#save-preferences:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+}
+
+#save-preferences i {
+    font-size: 1rem;
 }
 
 /* Toast 提示样式 */
@@ -490,11 +551,16 @@ input:checked + .slider:before {
     background-color: #f39c12;
 }
 
+/* 添加阴影效果的类，提高按钮区域的可见度 */
+.preferences-actions-shadow {
+    box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.1);
+}
+
 /* 确保模态框在移动设备上正确显示 */
 @media (max-width: 768px) {
     .preferences-modal-content {
-        width: 90%;
-        max-height: 80vh;
+        width: 95%;
+        max-height: 85vh;
         overflow-y: auto;
     }
     
@@ -511,4 +577,56 @@ input:checked + .slider:before {
         flex-wrap: wrap;
         justify-content: center;
     }
+    
+    .preferences-actions {
+        position: sticky;
+        bottom: 0;
+        padding: 10px 0;
+        margin-top: 15px;
+        background: var(--card-bg);
+        z-index: 100;
+    }
+    
+    #reset-preferences, #save-preferences {
+        padding: 12px;
+        width: 48%;
+        justify-content: center;
+    }
+    
+    .tab-btn {
+        padding: 8px 12px;
+        font-size: 14px;
+    }
+}
+
+/* 针对小屏幕手机的额外优化 */
+@media (max-width: 480px) {
+    .preferences-tabs {
+        flex-wrap: wrap;
+    }
+    
+    .tab-btn {
+        padding: 8px 10px;
+        font-size: 13px;
+    }
+    
+    .card-style-selector, .background-type-selector {
+        gap: 5px;
+    }
+    
+    #reset-preferences, #save-preferences {
+        font-size: 14px;
+        padding: 10px 8px;
+    }
+}
+
+/* 覆盖默认模态框样式，针对个性化设置模态框的特殊调整 */
+.modal {
+    align-items: flex-start !important; /* 强制顶部对齐 */
+    padding: 50px 0; /* 添加上下内边距 */
+    overflow-y: auto; /* 确保整体可滚动 */
+}
+
+.modal-body {
+    overflow-y: auto; /* 确保内容可以滚动 */
 } 

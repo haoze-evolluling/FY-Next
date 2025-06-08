@@ -621,6 +621,56 @@ const Preferences = (function() {
             modal.classList.add('active');
             // 重新应用设置到UI，确保显示最新设置
             applyPreferencesToUI();
+            
+            // 修复模态框位置和滚动问题
+            setTimeout(() => {
+                const modalContent = modal.querySelector('.modal-content');
+                if (modalContent) {
+                    // 重置模态框的滚动位置
+                    modalContent.scrollTop = 0;
+                    
+                    // 确保模态框在视口中居中
+                    const viewportHeight = window.innerHeight;
+                    const modalHeight = modalContent.offsetHeight;
+                    
+                    // 如果模态框高度大于视口高度的80%，则自动添加滚动条
+                    if (modalHeight > viewportHeight * 0.8) {
+                        modalContent.style.height = `${Math.floor(viewportHeight * 0.8)}px`;
+                    } else {
+                        modalContent.style.height = 'auto';
+                    }
+                    
+                    // 添加滚动监听，在移动设备上优化体验
+                    const isMobile = window.innerWidth <= 768;
+                    if (isMobile) {
+                        const preferencesActions = modalContent.querySelector('.preferences-actions');
+                        if (preferencesActions) {
+                            // 确保操作按钮始终在底部可见
+                            const observer = new IntersectionObserver((entries) => {
+                                entries.forEach(entry => {
+                                    if (entry.isIntersecting) {
+                                        preferencesActions.classList.remove('preferences-actions-shadow');
+                                    } else {
+                                        preferencesActions.classList.add('preferences-actions-shadow');
+                                    }
+                                });
+                            }, { threshold: 1.0 });
+                            
+                            observer.observe(preferencesActions);
+                            
+                            // 在模态框关闭时取消观察
+                            const closeBtn = modalContent.querySelector('.close-modal');
+                            if (closeBtn) {
+                                const originalClickHandler = closeBtn.onclick;
+                                closeBtn.onclick = (e) => {
+                                    observer.disconnect();
+                                    if (originalClickHandler) originalClickHandler(e);
+                                };
+                            }
+                        }
+                    }
+                }
+            }, 10);
         }
     };
     

@@ -10,7 +10,6 @@
     <link rel="stylesheet" href="css/lightmode.css">
     <link rel="stylesheet" href="css/screensaver.css">
     <link rel="stylesheet" href="css/click-animation.css">
-    <link rel="stylesheet" href="css/fix.css">
     <link rel="stylesheet" href="css/preferences.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,30 +18,44 @@
 </head>
 <body>
     <div class="container">
-        <header>
-            
-            <div class="search-bar">
-                <div class="search-input-wrapper">
-                    <i class="bi bi-search search-icon"></i>
-                    <input type="text" id="search-input" placeholder="输入关键词搜索...">
+        <header class="modern-header">
+            <div class="header-content">
+                <div class="logo-container">
+                    <div class="logo">
+                        <h1>凤羽</h1>
+                        <span class="logo-subtitle">个性化导航</span>
+                    </div>
                 </div>
-                <div class="search-engines">
-                    <button data-engine="baidu" class="search-engine-btn">百度</button>
-                    <button data-engine="google" class="search-engine-btn">Google</button>
-                    <button data-engine="bing" class="search-engine-btn">必应</button>
-                    <button data-engine="sogou" class="search-engine-btn">神马</button>
+                
+                <div class="search-container">
+                    <div class="search-wrapper">
+                        <div class="search-input-wrapper">
+                            <i class="bi bi-search search-icon"></i>
+                            <input type="text" id="search-input" placeholder="输入关键词搜索...">
+                            <button class="search-submit">
+                                <i class="bi bi-arrow-right"></i>
+                            </button>
+                        </div>
+                        <div class="search-engines">
+                            <button data-engine="baidu" class="search-engine-btn active">百度</button>
+                            <button data-engine="google" class="search-engine-btn">Google</button>
+                            <button data-engine="bing" class="search-engine-btn">必应</button>
+                            <button data-engine="sogou" class="search-engine-btn">神马</button>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="controls">
-                <button id="preferences-btn" class="icon-btn" title="个性化设置">
-                    <i class="bi bi-palette-fill"></i>
-                </button>
-                <button id="dark-mode-toggle" class="icon-btn" title="切换主题模式">
-                    <i class="bi bi-moon-fill"></i>
-                </button>
-                <button id="settings-btn" class="icon-btn" title="添加新分类">
-                    <i class="bi bi-gear-fill"></i>
-                </button>
+                
+                <div class="controls">
+                    <button id="preferences-btn" class="icon-btn" title="个性化设置">
+                        <i class="bi bi-palette-fill"></i>
+                    </button>
+                    <button id="dark-mode-toggle" class="icon-btn" title="切换主题模式">
+                        <i class="bi bi-moon-fill"></i>
+                    </button>
+                    <button id="settings-btn" class="icon-btn" title="添加新分类">
+                        <i class="bi bi-gear-fill"></i>
+                    </button>
+                </div>
             </div>
         </header>
 
@@ -194,18 +207,7 @@
                                 <button class="bg-type-option" data-type="default">
                                     <i class="bi bi-circle"></i>
                                     <span>默认</span>
-                                </button>
-                                <button class="bg-type-option" data-type="color">
-                                    <i class="bi bi-palette"></i>
-                                    <span>纯色</span>
-                                </button>
-                                <button class="bg-type-option" data-type="image">
-                                    <i class="bi bi-image"></i>
-                                    <span>图片</span>
-                                </button>
-                                <button class="bg-type-option" data-type="gradient">
-                                    <i class="bi bi-rainbow"></i>
-                                    <span>渐变</span>
+                                
                                 </button>
                             </div>
                         </div>
