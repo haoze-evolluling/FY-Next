@@ -53,4 +53,98 @@
 .bookmark-name {
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+/* 搜索框布局修复 */
+
+/* 确保搜索框容器正确显示 */
+.search-bar {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 100%;
+    position: relative;
+}
+
+/* 修复搜索输入框包装器 */
+.search-input-wrapper {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    position: relative;
+    overflow: visible;
+}
+
+/* 修复搜索图标位置 */
+.search-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    pointer-events: none;
+}
+
+/* 修复搜索输入框 */
+#search-input {
+    width: 100%;
+    box-sizing: border-box;
+    padding-left: 45px;
+    padding-right: 15px;
+}
+
+/* 修复搜索引擎按钮容器 */
+.search-engines {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 12px;
+    width: 100%;
+}
+
+/* 修复搜索引擎按钮 */
+.search-engine-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+}
+
+/* 响应式修复 */
+@media (max-width: 767px) {
+    /* 移动端搜索框布局 */
+    header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+    }
+    
+    .search-bar {
+        margin: 10px 0;
+        width: 100%;
+    }
+    
+    .search-engines {
+        gap: 8px;
+    }
+    
+    .search-engine-btn {
+        padding: 4px 10px;
+        font-size: 0.85rem;
+    }
+}
+
+/* 确保暗黑模式和亮色模式下搜索框正确显示 */
+body.dark-mode .search-input-wrapper,
+body.light-mode .search-input-wrapper {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+body.dark-mode #search-input,
+body.light-mode #search-input {
+    width: 100%;
+    box-sizing: border-box;
 } 

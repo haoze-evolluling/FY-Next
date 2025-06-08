@@ -16,13 +16,18 @@ body.light-mode {
 body.light-mode .search-input-wrapper {
     background-color: rgba(255, 255, 255, 0.95);
     border: 1px solid #e5e5e5;
-    border-radius: 30px; /* 确保有圆角 */
+    border-radius: 30px;
+    width: 100%; /* 确保宽度占满父容器 */
+    display: flex; /* 使用flex布局 */
+    align-items: center; /* 垂直居中 */
 }
 
 body.light-mode #search-input {
     color: #333333;
     background-color: transparent;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    width: 100%; /* 确保宽度占满父容器 */
+    box-sizing: border-box; /* 确保padding不会增加宽度 */
 }
 
 body.light-mode .search-engine-btn {
@@ -32,6 +37,9 @@ body.light-mode .search-engine-btn {
     box-sizing: border-box;
     padding: 5px 11px;
     height: 32px;
+    display: flex; /* 使用flex布局 */
+    align-items: center; /* 垂直居中 */
+    justify-content: center; /* 水平居中 */
 }
 
 body.light-mode .search-engine-btn:hover {
@@ -150,6 +158,7 @@ body.light-mode .site-footer a:hover {
 
 body.light-mode .search-icon {
     color: var(--light-text);
+    z-index: 1; /* 确保图标在输入框之上 */
 }
 
 body.light-mode .bookmark-actions button {
