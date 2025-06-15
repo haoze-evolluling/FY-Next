@@ -337,6 +337,63 @@ input:checked + .slider:before {
     height: 12px;
 }
 
+/* 磁贴布局选择器 */
+.tile-layout-selector {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin: 15px 0;
+}
+
+.tile-layout-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.tile-layout-option:hover {
+    background-color: var(--hover-color);
+}
+
+.tile-layout-option.active {
+    background-color: var(--hover-color);
+    border: 2px solid var(--accent-color);
+}
+
+.tile-preview {
+    width: 80px;
+    height: 50px;
+    border: 1px solid var(--border-color);
+    background-color: var(--card-bg);
+    padding: 5px;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.tile-row {
+    display: flex;
+    gap: 2px;
+    justify-content: space-between;
+}
+
+.tile-item {
+    flex: 1;
+    background-color: var(--border-color);
+    border-radius: 1px;
+    height: 15px;
+    min-width: 5px;
+}
+
 /* 背景设置 */
 .background-type-selector {
     display: flex;

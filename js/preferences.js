@@ -25,6 +25,9 @@ const Preferences = (function() {
     // 布局选择器
     const layoutOptions = document.querySelectorAll('.layout-option');
     
+    // 磁贴布局设置
+    const tileLayoutOptions = document.querySelectorAll('.tile-layout-option');
+    
     // 背景设置
     const bgTypeOptions = document.querySelectorAll('.bg-type-option');
     const bgOptions = document.querySelectorAll('.bg-option');
@@ -57,6 +60,7 @@ const Preferences = (function() {
         if (cardStyleOptions.length === 0) missingElements.push('card-style-option');
         if (!animationToggle) missingElements.push('animation-toggle');
         if (layoutOptions.length === 0) missingElements.push('layout-option');
+        if (tileLayoutOptions.length === 0) missingElements.push('tile-layout-option');
         if (bgTypeOptions.length === 0) missingElements.push('bg-type-option');
         if (bgOptions.length === 0) missingElements.push('bg-option');
         if (!bgColorPicker) missingElements.push('bg-color');
@@ -79,6 +83,136 @@ const Preferences = (function() {
     
     // 当前设置
     let currentPreferences = {};
+    
+    // 应用磁贴过渡效果
+    const applyTileTransitions = (container) => {
+        if (!container) return;
+        
+        // 检查是否支持动画
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        
+        // 添加容器过渡效果
+        if (!prefersReducedMotion) {
+            container.style.transition = 'grid-template-columns 0.5s ease-in-out';
+        }
+        
+        // 为磁贴元素添加过渡效果
+        const bookmarkItems = container.querySelectorAll('.bookmark-item');
+        bookmarkItems.forEach((item, index) => {
+            // 移除可能已存在的事件监听器
+            const newItem = item.cloneNode(true);
+            item.parentNode.replaceChild(newItem, item);
+            
+            // 设置基本过渡效果
+            if (!prefersReducedMotion) {
+                newItem.style.transition = 'transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), ' +
+                                         'box-shadow 0.3s ease, ' +
+                                         'opacity 0.3s ease';
+            }
+            
+            // 添加触摸反馈
+            newItem.addEventListener('touchstart', function() {
+                this.style.transform = 'scale(0.97)';
+            }, { passive: true });
+            
+            newItem.addEventListener('touchend', function() {
+                this.style.transform = 'scale(1)';
+            }, { passive: true });
+        });
+    };
+    
+    // 应用磁贴布局变化动画
+    const applyTileLayoutChange = (container, newLayout) => {
+        if (!container) return;
+        
+        // 检查是否支持动画
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        
+        // 添加布局变化类
+        container.classList.add('changing-layout');
+        
+        // 先获取当前的磁贴项
+        const bookmarkItems = container.querySelectorAll('.bookmark-item');
+        
+        // 记录当前位置
+        const itemPositions = [];
+        bookmarkItems.forEach(item => {
+            const rect = item.getBoundingClientRect();
+            itemPositions.push({
+                left: rect.left,
+                top: rect.top,
+                width: rect.width,
+                height: rect.height
+            });
+        });
+        
+        // 设置新布局
+        if (prefersReducedMotion) {
+            // 对于不喜欢动画的用户，直接设置布局而不添加过渡效果
+            container.style.gridTemplateColumns = `repeat(${newLayout}, 1fr)`;
+            container.classList.remove('changing-layout');
+        } else {
+            // 先禁用过渡
+            container.style.transition = 'none';
+            
+            // 立即应用新布局
+            container.style.gridTemplateColumns = `repeat(${newLayout}, 1fr)`;
+            
+            // 强制重绘
+            void container.offsetWidth;
+            
+            // 计算新位置
+            const newPositions = [];
+            bookmarkItems.forEach(item => {
+                const rect = item.getBoundingClientRect();
+                newPositions.push({
+                    left: rect.left,
+                    top: rect.top,
+                    width: rect.width,
+                    height: rect.height
+                });
+            });
+            
+            // 重置到原始位置
+            bookmarkItems.forEach((item, index) => {
+                if (index >= itemPositions.length) return;
+                
+                const oldPos = itemPositions[index];
+                const newPos = newPositions[index];
+                
+                // 计算需要的变换
+                const deltaX = oldPos.left - newPos.left;
+                const deltaY = oldPos.top - newPos.top;
+                const scaleX = oldPos.width / newPos.width;
+                const scaleY = oldPos.height / newPos.height;
+                
+                // 应用反向变换，使元素看起来还在原来的位置
+                item.style.transform = `translate(${deltaX}px, ${deltaY}px) scale(${scaleX}, ${scaleY})`;
+                item.style.transition = 'none';
+            });
+            
+            // 强制重绘
+            void container.offsetWidth;
+            
+            // 恢复过渡并移除变换，让元素平滑移动到新位置
+            container.style.transition = 'grid-template-columns 0.5s ease-in-out';
+            bookmarkItems.forEach((item, index) => {
+                item.style.transition = 'transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1)';
+                item.style.transform = '';
+                
+                // 添加动画类
+                setTimeout(() => {
+                    item.classList.add('layout-change-animation');
+                    
+                    // 移除动画类
+                    setTimeout(() => {
+                        item.classList.remove('layout-change-animation');
+                        container.classList.remove('changing-layout');
+                    }, 500);
+                }, index * 30); // 错开动画
+            });
+        }
+    };
     
     // 初始化
     const initialize = () => {
@@ -104,6 +238,82 @@ const Preferences = (function() {
             
             // 应用当前设置到页面
             applyPreferencesToPage();
+            
+            // 添加窗口大小变化监听器，以便在调整窗口大小时重新应用布局
+            window.addEventListener('resize', debounce(() => {
+                applyPreferencesToPage();
+            }, 250));
+            
+            // 创建并添加CSS样式
+            const styleElement = document.createElement('style');
+            styleElement.textContent = `
+                .changing-layout {
+                    pointer-events: none;
+                }
+                
+                .tile-transition {
+                    animation: tileScale 0.3s ease-in-out forwards;
+                }
+                
+                @keyframes tileScale {
+                    0% { transform: scale(0.95); opacity: 0.7; }
+                    50% { transform: scale(1.05); }
+                    100% { transform: scale(1); opacity: 1; }
+                }
+                
+                .bookmark-item {
+                    transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
+                    will-change: transform, opacity;
+                    backface-visibility: hidden;
+                    perspective: 1000px;
+                }
+                
+                .layout-change-animation {
+                    animation: layoutChange 0.5s ease-in-out forwards;
+                    will-change: transform, opacity;
+                }
+                
+                @keyframes layoutChange {
+                    0% { transform: scale(0.9); opacity: 0.7; }
+                    50% { transform: scale(1.05); opacity: 0.9; }
+                    100% { transform: scale(1); opacity: 1; }
+                }
+                
+                #bookmarks-container {
+                    transition: grid-template-columns 0.5s ease-in-out;
+                }
+                
+                .bookmark-item:hover {
+                    z-index: 10;
+                }
+                
+                /* 为不同位置的磁贴添加不同的悬停效果 */
+                @media (hover: hover) {
+                    .bookmark-item:nth-child(3n+1):hover {
+                        transform: translateY(-5px) rotate(-1deg);
+                        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+                    }
+                    
+                    .bookmark-item:nth-child(3n+2):hover {
+                        transform: translateY(-7px);
+                        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+                    }
+                    
+                    .bookmark-item:nth-child(3n+3):hover {
+                        transform: translateY(-5px) rotate(1deg);
+                        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+                    }
+                }
+                
+                /* 触摸设备的活动状态 */
+                @media (hover: none) {
+                    .bookmark-item:active {
+                        transform: scale(0.95);
+                        opacity: 0.9;
+                    }
+                }
+            `;
+            document.head.appendChild(styleElement);
             
             console.log('偏好设置模块初始化成功');
         } catch (error) {
@@ -212,9 +422,68 @@ const Preferences = (function() {
                 layoutOptions.forEach(o => o.classList.remove('active'));
                 option.classList.add('active');
                 currentPreferences.layout = layout;
+                
+                // 根据布局类型显示或隐藏磁贴布局选择器
+                const tileLayoutGroup = document.getElementById('tile-layout-group');
+                if (tileLayoutGroup) {
+                    tileLayoutGroup.style.display = layout === 'grid' ? 'block' : 'none';
+                }
+                
                 previewChanges();
             });
         });
+        
+        // 磁贴布局选择
+        tileLayoutOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                const tileLayout = option.dataset.tilelayout;
+                // 如果选择的是当前布局，不做任何变化
+                if (currentPreferences.tileLayout === tileLayout) {
+                    return;
+                }
+                
+                tileLayoutOptions.forEach(o => o.classList.remove('active'));
+                option.classList.add('active');
+                currentPreferences.tileLayout = tileLayout;
+                
+                // 立即应用新的磁贴布局并添加过渡效果
+                const bookmarksContainer = document.getElementById('bookmarks-container');
+                if (bookmarksContainer && document.body.classList.contains('layout-grid')) {
+                    let columns;
+                    // 根据不同的屏幕尺寸设置不同的列数
+                    if (window.innerWidth >= 1025) {
+                        columns = tileLayout;
+                    } else if (window.innerWidth >= 768 && window.innerWidth <= 1024) {
+                        columns = Math.min(2, tileLayout);
+                    } else {
+                        columns = 1;
+                    }
+                    
+                    // 先让所有磁贴有一个明显的变化
+                    const bookmarkItems = bookmarksContainer.querySelectorAll('.bookmark-item');
+                    bookmarkItems.forEach(item => {
+                        item.style.opacity = '0.8';
+                        item.style.transform = 'scale(0.95)';
+                    });
+                    
+                    // 强制重绘
+                    void bookmarksContainer.offsetWidth;
+                    
+                    // 应用布局变化动画
+                    setTimeout(() => {
+                        applyTileLayoutChange(bookmarksContainer, columns);
+                    }, 50);
+                }
+                
+                previewChanges();
+            });
+        });
+        
+        // 根据当前布局设置磁贴布局选择器显示状态
+        const tileLayoutGroup = document.getElementById('tile-layout-group');
+        if (tileLayoutGroup && currentPreferences.layout) {
+            tileLayoutGroup.style.display = currentPreferences.layout === 'grid' ? 'block' : 'none';
+        }
         
         // 背景类型选择
         bgTypeOptions.forEach(option => {
@@ -408,6 +677,17 @@ const Preferences = (function() {
                 option.classList.toggle('active', option.dataset.layout === currentPreferences.layout);
             });
             
+            // 磁贴布局选择
+            tileLayoutOptions.forEach(option => {
+                option.classList.toggle('active', option.dataset.tilelayout === currentPreferences.tileLayout);
+            });
+            
+            // 根据当前布局设置磁贴布局选择器显示状态
+            const tileLayoutGroup = document.getElementById('tile-layout-group');
+            if (tileLayoutGroup && currentPreferences.layout) {
+                tileLayoutGroup.style.display = currentPreferences.layout === 'grid' ? 'block' : 'none';
+            }
+            
             // 背景类型
             if (currentPreferences.background && currentPreferences.background.type) {
                 bgTypeOptions.forEach(option => {
@@ -505,222 +785,49 @@ const Preferences = (function() {
                 document.body.classList.add(`layout-${currentPreferences.layout}`);
             }
             
+            // 应用磁贴布局设置
+            if (currentPreferences.tileLayout) {
+                document.documentElement.style.setProperty('--tiles-per-row', currentPreferences.tileLayout);
+                
+                // 更新磁贴容器的列数
+                const bookmarksContainer = document.getElementById('bookmarks-container');
+                if (bookmarksContainer && document.body.classList.contains('layout-grid')) {
+                    // 应用过渡效果
+                    applyTileTransitions(bookmarksContainer);
+                    
+                    let columns;
+                    // 根据不同的屏幕尺寸设置不同的列数
+                    if (window.innerWidth >= 1025) {
+                        // 电脑端
+                        columns = currentPreferences.tileLayout;
+                    } else if (window.innerWidth >= 768 && window.innerWidth <= 1024) {
+                        // 平板端 - 最多2列
+                        columns = Math.min(2, currentPreferences.tileLayout);
+                    } else {
+                        // 手机端 - 固定1列
+                        columns = 1;
+                    }
+                    
+                    // 应用布局变化动画
+                    applyTileLayoutChange(bookmarksContainer, columns);
+                }
+            }
+            
             // 应用背景设置
             const container = document.querySelector('.container');
             if (container && currentPreferences.blur !== undefined) {
                 container.style.backdropFilter = `blur(${currentPreferences.blur}px)`;
                 container.style.webkitBackdropFilter = `blur(${currentPreferences.blur}px)`; // Safari 支持
             }
-            
-            if (currentPreferences.background && currentPreferences.background.type) {
-                switch (currentPreferences.background.type) {
-                    case 'default':
-                        document.body.style.background = '';
-                        document.body.style.backgroundImage = '';
-                        document.body.style.backgroundColor = '';
-                        break;
-                        
-                    case 'color':
-                        if (currentPreferences.background.value) {
-                            document.body.style.background = '';
-                            document.body.style.backgroundImage = '';
-                            document.body.style.backgroundColor = currentPreferences.background.value;
-                        }
-                        break;
-                        
-                    case 'image':
-                        if (currentPreferences.background.value) {
-                            document.body.style.background = '';
-                            document.body.style.backgroundColor = '';
-                            document.body.style.backgroundImage = `url(${currentPreferences.background.value})`;
-                            document.body.style.backgroundSize = 'cover';
-                            document.body.style.backgroundPosition = 'center';
-                            document.body.style.backgroundAttachment = 'fixed';
-                            document.body.style.backgroundRepeat = 'no-repeat';
-                        }
-                        break;
-                        
-                    case 'gradient':
-                        if (typeof currentPreferences.background.value === 'object') {
-                            const { color1, color2, direction } = currentPreferences.background.value;
-                            if (color1 && color2 && direction) {
-                                document.body.style.backgroundColor = '';
-                                document.body.style.backgroundImage = '';
-                                
-                                if (direction === 'circle') {
-                                    document.body.style.background = `radial-gradient(circle, ${color1}, ${color2})`;
-                                } else {
-                                    document.body.style.background = `linear-gradient(${direction}, ${color1}, ${color2})`;
-                                }
-                            }
-                        }
-                        break;
-                }
-            }
-            
-            // 应用主题设置
-            applyTheme(currentPreferences.theme);
         } catch (error) {
             console.error('应用设置到页面时出错:', error);
         }
     };
     
-    // 应用主题设置
-    const applyTheme = (theme) => {
-        if (theme === 'dark') {
-            document.body.classList.add('dark-mode');
-        } else if (theme === 'light') {
-            document.body.classList.remove('dark-mode');
-        } else {
-            // 自动模式，根据系统偏好设置
-            const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
-            document.body.classList.toggle('dark-mode', prefersDarkMode);
-            
-            // 监听系统主题变化
-            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-                document.body.classList.toggle('dark-mode', e.matches);
-            });
-        }
-    };
-    
-    // 保存设置
-    const savePreferences = () => {
-        try {
-            Storage.updatePreferences(currentPreferences);
-            closeModal(preferencesModal);
-            
-            // 应用主题设置
-            applyTheme(currentPreferences.theme);
-            
-            // 显示保存成功提示
-            showToast('设置已保存');
-        } catch (error) {
-            console.error('保存设置时出错:', error);
-            showToast('保存设置失败', 'error');
-        }
-    };
-    
-    // 重置设置
-    const resetPreferences = () => {
-        if (confirm('确定要重置所有个性化设置吗？这将恢复默认设置。')) {
-            try {
-                currentPreferences = Storage.resetPreferences();
-                applyPreferencesToUI();
-                applyPreferencesToPage();
-                showToast('已恢复默认设置');
-            } catch (error) {
-                console.error('重置设置时出错:', error);
-                showToast('重置设置失败', 'error');
-            }
-        }
-    };
-    
-    // 打开模态框
-    const openModal = (modal) => {
-        if (modal) {
-            modal.classList.add('active');
-            // 重新应用设置到UI，确保显示最新设置
-            applyPreferencesToUI();
-            
-            // 修复模态框位置和滚动问题
-            setTimeout(() => {
-                const modalContent = modal.querySelector('.modal-content');
-                if (modalContent) {
-                    // 重置模态框的滚动位置
-                    modalContent.scrollTop = 0;
-                    
-                    // 确保模态框在视口中居中
-                    const viewportHeight = window.innerHeight;
-                    const modalHeight = modalContent.offsetHeight;
-                    
-                    // 如果模态框高度大于视口高度的80%，则自动添加滚动条
-                    if (modalHeight > viewportHeight * 0.8) {
-                        modalContent.style.height = `${Math.floor(viewportHeight * 0.8)}px`;
-                    } else {
-                        modalContent.style.height = 'auto';
-                    }
-                    
-                    // 添加滚动监听，在移动设备上优化体验
-                    const isMobile = window.innerWidth <= 768;
-                    if (isMobile) {
-                        const preferencesActions = modalContent.querySelector('.preferences-actions');
-                        if (preferencesActions) {
-                            // 确保操作按钮始终在底部可见
-                            const observer = new IntersectionObserver((entries) => {
-                                entries.forEach(entry => {
-                                    if (entry.isIntersecting) {
-                                        preferencesActions.classList.remove('preferences-actions-shadow');
-                                    } else {
-                                        preferencesActions.classList.add('preferences-actions-shadow');
-                                    }
-                                });
-                            }, { threshold: 1.0 });
-                            
-                            observer.observe(preferencesActions);
-                            
-                            // 在模态框关闭时取消观察
-                            const closeBtn = modalContent.querySelector('.close-modal');
-                            if (closeBtn) {
-                                const originalClickHandler = closeBtn.onclick;
-                                closeBtn.onclick = (e) => {
-                                    observer.disconnect();
-                                    if (originalClickHandler) originalClickHandler(e);
-                                };
-                            }
-                        }
-                    }
-                }
-            }, 10);
-        }
-    };
-    
-    // 关闭模态框
-    const closeModal = (modal) => {
-        if (modal) {
-            modal.classList.remove('active');
-        }
-    };
-    
-    // 显示提示消息
-    const showToast = (message, type = 'success') => {
-        // 检查是否已有toast元素
-        let toast = document.getElementById('preferences-toast');
-        
-        // 如果没有则创建
-        if (!toast) {
-            toast = document.createElement('div');
-            toast.id = 'preferences-toast';
-            document.body.appendChild(toast);
-        }
-        
-        // 设置消息和类型
-        toast.textContent = message;
-        toast.className = `toast ${type}`;
-        
-        // 显示toast
-        toast.classList.add('show');
-        
-        // 3秒后隐藏
-        setTimeout(() => {
-            toast.classList.remove('show');
-        }, 3000);
-    };
-    
-    // 防抖函数
-    const debounce = (func, wait) => {
-        let timeout;
-        return function executedFunction(...args) {
-            const later = () => {
-                clearTimeout(timeout);
-                func(...args);
-            };
-            clearTimeout(timeout);
-            timeout = setTimeout(later, wait);
-        };
-    };
-    
-    // 公开API
     return {
-        initialize
+        initialize: initialize,
+        applyPreferencesToUI: applyPreferencesToUI,
+        applyPreferencesToPage: applyPreferencesToPage,
+        previewChanges: previewChanges
     };
-})(); 
+})();

@@ -24,6 +24,7 @@
     --header-height: 160px;
     --desktop-breakpoint: 1024px;
     --tablet-breakpoint: 768px;
+    --tiles-per-row: 4; /* 默认每行显示4个磁贴 */
 }
 
 * {
@@ -258,7 +259,7 @@ body {
     display: grid;
     gap: 20px;
     width: 100%;
-    grid-template-columns: repeat(4, 1fr); /* 默认电脑端显示4个磁贴 */
+    grid-template-columns: repeat(var(--tiles-per-row), 1fr); /* 使用CSS变量控制列数 */
 }
 
 .category {
@@ -696,18 +697,17 @@ a.bookmark-name:hover {
     --tablet-breakpoint: 768px;
 }
 
-/* 响应式布局 - 自适应磁贴数量 */
-/* 电脑端 - 默认4个磁贴一行 */
+/* 电脑端 - 使用变量控制磁贴数量 */
 @media (min-width: 1025px) {
     #bookmarks-container {
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(var(--tiles-per-row), 1fr);
     }
 }
 
-/* 平板端 - 2个磁贴一行 */
+/* 平板端 - 最多2个磁贴一行 */
 @media (min-width: 768px) and (max-width: 1024px) {
     #bookmarks-container {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(min(2, var(--tiles-per-row)), 1fr);
     }
     
     .bookmarks-list {
