@@ -11,6 +11,104 @@ const Preferences = (function() {
     const tabContents = document.querySelectorAll('.tab-content');
     const closeModalBtn = preferencesModal ? preferencesModal.querySelector('.close-modal') : null;
     
+    // 打开模态框函数
+    const openModal = (modal) => {
+        if (!modal) return;
+        modal.style.display = 'flex';
+        setTimeout(() => {
+            modal.classList.add('active');
+            document.body.classList.add('modal-open');
+        }, 10);
+    };
+    
+    // 关闭模态框函数
+    const closeModal = (modal) => {
+        if (!modal) return;
+        modal.classList.remove('active');
+        setTimeout(() => {
+            modal.style.display = 'none';
+            document.body.classList.remove('modal-open');
+        }, 300); // 等待过渡效果完成
+    };
+    
+    // debounce函数 - 用于减少函数执行频率
+    const debounce = (func, wait) => {
+        let timeout;
+        return function() {
+            const context = this;
+            const args = arguments;
+            clearTimeout(timeout);
+            timeout = setTimeout(() => {
+                func.apply(context, args);
+            }, wait);
+        };
+    };
+    
+    // 保存设置函数
+    const savePreferences = () => {
+        try {
+            // 保存当前设置到Storage
+            Storage.updatePreferences(currentPreferences);
+            
+            // 关闭模态框
+            closeModal(preferencesModal);
+            
+            // 显示保存成功提示
+            const toast = document.createElement('div');
+            toast.className = 'toast toast-success';
+            toast.textContent = '设置已保存';
+            document.body.appendChild(toast);
+            
+            // 自动移除提示
+            setTimeout(() => {
+                toast.classList.add('toast-hide');
+                setTimeout(() => {
+                    document.body.removeChild(toast);
+                }, 300);
+            }, 3000);
+            
+            console.log('设置已保存', currentPreferences);
+        } catch (error) {
+            console.error('保存设置失败:', error);
+            alert('保存设置失败');
+        }
+    };
+    
+    // 重置设置函数
+    const resetPreferences = () => {
+        if (confirm('确定要重置所有设置吗？')) {
+            try {
+                // 获取默认设置
+                currentPreferences = Storage.resetPreferences();
+                
+                // 应用设置到UI
+                applyPreferencesToUI();
+                
+                // 应用设置到页面
+                applyPreferencesToPage();
+                
+                // 显示重置成功提示
+                const toast = document.createElement('div');
+                toast.className = 'toast toast-info';
+                toast.textContent = '设置已重置';
+                document.body.appendChild(toast);
+                
+                // 自动移除提示
+                setTimeout(() => {
+                    toast.classList.add('toast-hide');
+                    setTimeout(() => {
+                        document.body.removeChild(toast);
+                    }, 300);
+                }, 3000);
+                
+                console.log('设置已重置', currentPreferences);
+            } catch (error) {
+                console.error('重置设置失败:', error);
+                alert('重置设置失败');
+            }
+        }
+    };
+    
     // 主题选择器
     const themeOptions = document.querySelectorAll('.theme-option');
     const accentColorPicker = document.getElementById('accent-color');
@@ -144,6 +242,10 @@ const Preferences = (function() {
                 width: rect.width,
                 height: rect.height
             });
+            
+            // 确保元素有初始状态
+            item.style.transformOrigin = 'center center';
+            item.style.willChange = 'transform, opacity';
         });
         
         // 设置新布局
@@ -189,27 +291,43 @@ const Preferences = (function() {
                 // 应用反向变换，使元素看起来还在原来的位置
                 item.style.transform = `translate(${deltaX}px, ${deltaY}px) scale(${scaleX}, ${scaleY})`;
                 item.style.transition = 'none';
+                item.style.opacity = '0.9';  // 轻微降低不透明度，提高视觉效果
             });
             
             // 强制重绘
             void container.offsetWidth;
             
             // 恢复过渡并移除变换，让元素平滑移动到新位置
-            container.style.transition = 'grid-template-columns 0.5s ease-in-out';
+            container.style.transition = 'grid-template-columns 0.75s cubic-bezier(0.2, 0.8, 0.2, 1)';
+            
+            // 错开每个项目的动画以创建级联效果
             bookmarkItems.forEach((item, index) => {
-                item.style.transition = 'transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1)';
-                item.style.transform = '';
-                
-                // 添加动画类
                 setTimeout(() => {
+                    item.style.transition = 'transform 0.75s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.75s cubic-bezier(0.2, 0.8, 0.2, 1)';
+                    item.style.transform = '';
+                    item.style.opacity = '1';
+                    
+                    // 添加动画类
                     item.classList.add('layout-change-animation');
                     
-                    // 移除动画类
+                    // 移除动画类和清理样式
                     setTimeout(() => {
                         item.classList.remove('layout-change-animation');
-                        container.classList.remove('changing-layout');
-                    }, 500);
-                }, index * 30); // 错开动画
+                        if (index === bookmarkItems.length - 1) {
+                            container.classList.remove('changing-layout');
+                            
+                            // 清理可能残留的内联样式
+                            bookmarkItems.forEach(cleanItem => {
+                                setTimeout(() => {
+                                    cleanItem.style.transform = '';
+                                    cleanItem.style.transition = '';
+                                    cleanItem.style.opacity = '';
+                                    cleanItem.style.willChange = '';
+                                }, 50);
+                            });
+                        }
+                    }, 800);
+                }, index * 50); // 显著增加错开时间以创建更明显的级联效果
             });
         }
     };
@@ -269,7 +387,7 @@ const Preferences = (function() {
                 }
                 
                 .layout-change-animation {
-                    animation: layoutChange 0.5s ease-in-out forwards;
+                    animation: layoutChange 0.75s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
                     will-change: transform, opacity;
                 }
                 
@@ -280,7 +398,7 @@ const Preferences = (function() {
                 }
                 
                 #bookmarks-container {
-                    transition: grid-template-columns 0.5s ease-in-out;
+                    transition: grid-template-columns 0.75s cubic-bezier(0.2, 0.8, 0.2, 1);
                 }
                 
                 .bookmark-item:hover {
@@ -311,6 +429,38 @@ const Preferences = (function() {
                         transform: scale(0.95);
                         opacity: 0.9;
                     }
+                }
+                
+                /* Toast提示样式 */
+                .toast {
+                    position: fixed;
+                    bottom: 30px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    padding: 12px 24px;
+                    border-radius: 8px;
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                    z-index: 10000;
+                    font-size: 14px;
+                    opacity: 1;
+                    transition: opacity 0.3s ease;
+                    color: #fff;
+                }
+                
+                .toast-success {
+                    background-color: #4CAF50;
+                }
+                
+                .toast-info {
+                    background-color: var(--accent-color, #4a6cf7);
+                }
+                
+                .toast-error {
+                    background-color: #F44336;
+                }
+                
+                .toast-hide {
+                    opacity: 0;
                 }
             `;
             document.head.appendChild(styleElement);
