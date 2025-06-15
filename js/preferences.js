@@ -50,6 +50,15 @@ const Preferences = (function() {
             // 保存当前设置到Storage
             Storage.updatePreferences(currentPreferences);
             
+            // 确保ThemeManager与保存的设置同步
+            if (typeof ThemeManager !== 'undefined') {
+                if (currentPreferences.theme === 'dark') {
+                    ThemeManager.enableDarkMode(true);
+                } else {
+                    ThemeManager.enableLightMode(true);
+                }
+            }
+            
             // 关闭模态框
             closeModal(preferencesModal);
             
@@ -332,6 +341,49 @@ const Preferences = (function() {
         }
     };
     
+    // 检查当前主题状态
+    const checkCurrentTheme = () => {
+        // 优先使用 ThemeManager 的信息
+        if (typeof ThemeManager !== 'undefined') {
+            const currentTheme = ThemeManager.getCurrentTheme();
+            updateThemeSelection(currentTheme);
+        } else {
+            // 回退到旧方法
+            const isDarkMode = document.body.classList.contains('dark-mode');
+            updateThemeSelection(isDarkMode ? 'dark' : 'light');
+        }
+    };
+    
+    // 更新主题选择UI
+    const updateThemeSelection = (theme) => {
+        themeOptions.forEach(option => {
+            const optionTheme = option.getAttribute('data-theme');
+            if (optionTheme === theme) {
+                option.classList.add('active');
+            } else {
+                option.classList.remove('active');
+            }
+        });
+        
+        // 同步更新当前首选项对象
+        if (currentPreferences) {
+            currentPreferences.theme = theme;
+        }
+    };
+    
+    // 提供给ThemeManager调用的方法
+    const updateThemeState = (theme) => {
+        // 只在偏好设置窗口打开时更新UI
+        if (preferencesModal && preferencesModal.classList.contains('active')) {
+            updateThemeSelection(theme);
+        }
+        
+        // 更新当前偏好设置
+        if (currentPreferences) {
+            currentPreferences.theme = theme;
+        }
+    };
+    
     // 初始化
     const initialize = () => {
         try {
@@ -347,6 +399,9 @@ const Preferences = (function() {
                 setTimeout(initialize, 300);
                 return;
             }
+            
+            // 与ThemeManager协调
+            checkCurrentTheme();
             
             // 设置事件监听器
             setupEventListeners();
@@ -528,10 +583,27 @@ const Preferences = (function() {
         // 主题选择
         themeOptions.forEach(option => {
             option.addEventListener('click', () => {
-                const theme = option.dataset.theme;
+                const theme = option.getAttribute('data-theme');
+                
+                // 移除所有主题选项的活动状态
                 themeOptions.forEach(o => o.classList.remove('active'));
+                
+                // 设置当前选中项
                 option.classList.add('active');
+                
+                // 更新当前配置
                 currentPreferences.theme = theme;
+                
+                // 与ThemeManager协调
+                if (typeof ThemeManager !== 'undefined') {
+                    if (theme === 'dark') {
+                        ThemeManager.enableDarkMode(false); // 不保存，只预览
+                    } else {
+                        ThemeManager.enableLightMode(false); // 不保存，只预览
+                    }
+                }
+                
+                // 应用预览
                 previewChanges();
             });
         });
@@ -962,20 +1034,14 @@ const Preferences = (function() {
                     applyTileLayoutChange(bookmarksContainer, columns);
                 }
             }
-            
-            // 应用背景设置
-            const container = document.querySelector('.container');
-            if (container && currentPreferences.blur !== undefined) {
-                container.style.backdropFilter = `blur(${currentPreferences.blur}px)`;
-                container.style.webkitBackdropFilter = `blur(${currentPreferences.blur}px)`; // Safari 支持
-            }
         } catch (error) {
             console.error('应用设置到页面时出错:', error);
         }
     };
     
     return {
-        initialize: initialize,
+        initialize,
+        updateThemeState,
         applyPreferencesToUI: applyPreferencesToUI,
         applyPreferencesToPage: applyPreferencesToPage,
         previewChanges: previewChanges

@@ -4,9 +4,25 @@
 (function() {
     // 当DOM加载完成后初始化应用
     document.addEventListener('DOMContentLoaded', () => {
+        // 初始化主题管理器(优先初始化)
+        if (typeof ThemeManager !== 'undefined') {
+            try {
+                ThemeManager.initialize();
+                console.log('主题管理器初始化成功');
+            } catch (error) {
+                console.error('初始化主题管理器失败:', error);
+            }
+        } else {
+            console.error('找不到ThemeManager模块');
+        }
+        
         // 初始化UI
-        UI.initialize();
-
+        if (typeof UI !== 'undefined') {
+            UI.initialize();
+        } else {
+            console.error('找不到UI模块');
+        }
+        
         // 初始化屏保
         if (typeof Screensaver !== 'undefined') {
             try {
@@ -82,7 +98,11 @@
             
             // Alt + D: 切换深色模式
             if (e.altKey && e.key === 'd') {
-                document.getElementById('dark-mode-toggle').click();
+                if (typeof ThemeManager !== 'undefined') {
+                    ThemeManager.toggleTheme();
+                } else {
+                    document.getElementById('dark-mode-toggle').click();
+                }
             }
         });
     };

@@ -7,8 +7,7 @@ const Screensaver = (function() {
     const PARTICLES_COUNT = 30; // 粒子数量
     
     // 变量
-    // 将 idleTimer 设置为全局变量
-    window.idleTimer = null;
+    let idleTimer = null; // 修改为模块内部变量，而不是全局变量
     let screensaverElem;
     let clockElem;
     let dateElem;
@@ -28,9 +27,6 @@ const Screensaver = (function() {
         
         // 设置事件监听
         setupEventListeners();
-        
-        // 移除首次自动显示屏保的功能
-        // showScreensaver();
         
         // 启动空闲检测
         resetIdleTimer();
@@ -134,6 +130,27 @@ const Screensaver = (function() {
                 updateParticlesPosition();
             }
         });
+        
+        // 监听主题变化事件
+        document.addEventListener('themeChange', (e) => {
+            if (isScreensaverActive) {
+                // 更新时钟的主题样式
+                updateClockTheme(e.detail.theme);
+            }
+        });
+    };
+    
+    // 更新时钟主题样式
+    const updateClockTheme = (theme) => {
+        if (clockContainer) {
+            if (theme === 'dark') {
+                clockContainer.classList.add('dark-theme');
+                clockContainer.classList.remove('light-theme');
+            } else {
+                clockContainer.classList.add('light-theme');
+                clockContainer.classList.remove('dark-theme');
+            }
+        }
     };
     
     // 更新粒子位置
@@ -176,8 +193,8 @@ const Screensaver = (function() {
     
     // 重置空闲计时器
     const resetIdleTimer = () => {
-        clearTimeout(window.idleTimer);
-        window.idleTimer = setTimeout(showScreensaver, IDLE_TIME);
+        clearTimeout(idleTimer);
+        idleTimer = setTimeout(showScreensaver, IDLE_TIME);
     };
     
     // 显示屏保
@@ -198,66 +215,69 @@ const Screensaver = (function() {
         
         // 为时钟容器添加入场动画
         clockContainer.style.opacity = '0';
-        clockContainer.style.transform = 'scale(0.9)';
         
-        // 显示屏保
-        screensaverElem.classList.add('active');
+        // 显示屏保元素
+        screensaverElem.style.display = 'flex';
         
-        // 延迟一下再显示时钟容器，产生平滑过渡效果
+        // 触发重排后添加活动类
         setTimeout(() => {
-            clockContainer.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            screensaverElem.classList.add('active');
             clockContainer.style.opacity = '1';
-            clockContainer.style.transform = 'scale(1)';
-        }, 300);
+        }, 10);
         
         isScreensaverActive = true;
+        
+        // 设置正确的主题
+        if (typeof ThemeManager !== 'undefined') {
+            updateClockTheme(ThemeManager.getCurrentTheme());
+        }
     };
     
     // 隐藏屏保
     const hideScreensaver = () => {
-        // 如果屏保未激活，则直接返回
         if (!isScreensaverActive) return;
         
-        // 为时钟容器添加退场动画
-        clockContainer.style.opacity = '0';
-        clockContainer.style.transform = 'scale(0.9)';
+        // 停止时间更新
+        clearInterval(timeUpdateInterval);
         
-        // 延迟一下再隐藏屏保，让动画有时间完成
+        // 移除活动类
+        screensaverElem.classList.remove('active');
+        
+        // 恢复主内容显示
+        if (contentContainer) {
+            contentContainer.classList.remove('content-hidden');
+        }
+        
+        // 等待过渡效果完成后隐藏元素
         setTimeout(() => {
-            screensaverElem.classList.remove('active');
-            
-            // 显示主内容
-            if (contentContainer) {
-                contentContainer.classList.remove('content-hidden');
-            }
-            
-            isScreensaverActive = false;
-        }, 300);
+            screensaverElem.style.display = 'none';
+        }, 500);
+        
+        isScreensaverActive = false;
+        
+        // 重置空闲计时器
+        resetIdleTimer();
     };
     
-    // 更新时间显示
+    // 更新时间
     const updateTime = () => {
         const now = new Date();
         
-        // 时间格式化
+        // 更新时钟
         const hours = now.getHours().toString().padStart(2, '0');
         const minutes = now.getMinutes().toString().padStart(2, '0');
         const seconds = now.getSeconds().toString().padStart(2, '0');
-        
-        // 日期格式化
-        const year = now.getFullYear();
-        const month = (now.getMonth() + 1).toString().padStart(2, '0');
-        const day = now.getDate().toString().padStart(2, '0');
-        const weekDay = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'][now.getDay()];
-        
-        // 更新DOM
         clockElem.textContent = `${hours}:${minutes}:${seconds}`;
-        dateElem.textContent = `${year}年${month}月${day}日 ${weekDay}`;
+        
+        // 更新日期
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        dateElem.textContent = now.toLocaleDateString('zh-CN', options);
     };
     
     // 公开API
     return {
         initialize,
-        resetIdleTimer  // 暴露重置计时器函数
+        showScreensaver,
+        hideScreensaver
     };
 })(); 

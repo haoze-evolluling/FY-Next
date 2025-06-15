@@ -18,6 +18,7 @@ const Storage = (function() {
         cardStyle: 'default',          // 卡片样式: 'default', 'rounded', 'flat', 'bordered'
         animation: true,               // 是否启用动画
         layout: 'grid',                // 布局方式: 'grid' 或 'list'
+        tileLayout: '4',               // 每行磁贴数量 (作为字符串，与data-tilelayout保持一致)
         blur: 0                        // 背景模糊值(px)
     };
     
@@ -218,36 +219,6 @@ const Storage = (function() {
         };
     };
     
-    // 更新书签顺序
-    const updateBookmarkOrder = (categoryId, orderedBookmarkIds) => {
-        const bookmarks = getBookmarks();
-        
-        // 创建一个映射以便于快速查询
-        const bookmarksMap = {};
-        bookmarks.forEach(bookmark => {
-            bookmarksMap[bookmark.id] = bookmark;
-        });
-        
-        // 为指定分类下的书签设置排序顺序
-        const categoryBookmarks = bookmarks.filter(bookmark => bookmark.categoryId === categoryId);
-        orderedBookmarkIds.forEach((id, index) => {
-            if (bookmarksMap[id] && bookmarksMap[id].categoryId === categoryId) {
-                bookmarksMap[id].order = index;
-            }
-        });
-        
-        // 为没有排序值的书签设置默认排序
-        bookmarks.forEach(bookmark => {
-            if (bookmark.order === undefined) {
-                bookmark.order = 9999; // 默认放在末尾
-            }
-        });
-        
-        localStorage.setItem(BOOKMARKS_KEY, JSON.stringify(bookmarks));
-        
-        return bookmarks;
-    };
-    
     // 导出所有数据
     const exportData = () => {
         const data = {
@@ -328,7 +299,6 @@ const Storage = (function() {
         getFaviconUrl,
         exportData,
         importData,
-        updateBookmarkOrder,
         getPreferences,
         updatePreferences,
         resetPreferences
