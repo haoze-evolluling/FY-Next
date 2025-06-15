@@ -48,17 +48,23 @@ const ThemeManager = (function() {
         }
         
         // 添加切换动画效果
-        darkModeToggle.classList.add('icon-spin');
-        setTimeout(() => {
-            darkModeToggle.classList.remove('icon-spin');
-        }, 500);
+        if (darkModeToggle) {
+            darkModeToggle.classList.add('icon-spin');
+            setTimeout(() => {
+                darkModeToggle.classList.remove('icon-spin');
+            }, 500);
+        }
     };
     
     // 启用深色模式
     const enableDarkMode = (savePreference = true) => {
         body.classList.add('dark-mode');
         body.classList.remove('light-mode');
-        darkModeToggle.innerHTML = '<i class="bi bi-sun-fill"></i>';
+        
+        if (darkModeToggle) {
+            darkModeToggle.innerHTML = '<i class="bi bi-sun-fill"></i>';
+        }
+        
         isDarkMode = true;
         
         if (savePreference) {
@@ -73,7 +79,11 @@ const ThemeManager = (function() {
     const enableLightMode = (savePreference = true) => {
         body.classList.remove('dark-mode');
         body.classList.add('light-mode');
-        darkModeToggle.innerHTML = '<i class="bi bi-moon-stars-fill"></i>';
+        
+        if (darkModeToggle) {
+            darkModeToggle.innerHTML = '<i class="bi bi-moon-stars-fill"></i>';
+        }
+        
         isDarkMode = false;
         
         if (savePreference) {
@@ -104,6 +114,7 @@ const ThemeManager = (function() {
     
     // 发布主题状态给其他模块
     const publishThemeState = () => {
+        // 更新偏好设置中的主题状态
         if (typeof Preferences !== 'undefined' && Preferences.updateThemeState) {
             Preferences.updateThemeState(isDarkMode ? 'dark' : 'light');
         }
@@ -113,6 +124,18 @@ const ThemeManager = (function() {
             detail: { theme: isDarkMode ? 'dark' : 'light' }
         });
         document.dispatchEvent(themeEvent);
+        
+        // 更新简约模式的主题（如果简约模式处于激活状态）
+        const simpleMode = document.getElementById('simple-mode');
+        if (simpleMode) {
+            if (isDarkMode) {
+                simpleMode.classList.add('dark-mode');
+                simpleMode.classList.remove('light-mode');
+            } else {
+                simpleMode.classList.add('light-mode');
+                simpleMode.classList.remove('dark-mode');
+            }
+        }
     };
     
     // 获取当前主题状态

@@ -4,6 +4,11 @@
 (function() {
     // 当DOM加载完成后初始化应用
     document.addEventListener('DOMContentLoaded', () => {
+        // 设置默认启用简约模式（如果用户之前没有设置过）
+        if (localStorage.getItem('simple_mode') === null) {
+            localStorage.setItem('simple_mode', 'true');
+        }
+        
         // 初始化主题管理器(优先初始化)
         if (typeof ThemeManager !== 'undefined') {
             try {
@@ -21,6 +26,18 @@
             UI.initialize();
         } else {
             console.error('找不到UI模块');
+        }
+        
+        // 初始化简约模式（优先于其他功能）
+        if (typeof SimpleMode !== 'undefined') {
+            try {
+                SimpleMode.initialize();
+                console.log('简约模式初始化成功');
+            } catch (error) {
+                console.error('初始化简约模式失败:', error);
+            }
+        } else {
+            console.error('找不到SimpleMode模块');
         }
         
         // 初始化屏保
@@ -102,6 +119,15 @@
                     ThemeManager.toggleTheme();
                 } else {
                     document.getElementById('dark-mode-toggle').click();
+                }
+            }
+            
+            // Alt + M: 切换简约模式
+            if (e.altKey && e.key === 'm') {
+                if (typeof SimpleMode !== 'undefined') {
+                    SimpleMode.toggleSimpleMode();
+                } else {
+                    document.getElementById('simple-mode-toggle').click();
                 }
             }
         });
